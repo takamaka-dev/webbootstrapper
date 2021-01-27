@@ -5,6 +5,22 @@
 Welcome to the new blockchain technology of TAKAMAKA. 
 The purpose of this guide is to offer an easy instruction guide to start using the API of this thrilled technology and customize the front end adopting it to the technology or programing language that most suits your needs. 
 
+# STARTUP EXAMPLE
+## Launcher file example
+```bash
+#!/bin/bash
+/usr/lib/jvm/jdk-11.0.10/bin/java -Xmx512M -jar webapp/WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar -s
+```
+{PATH TO JAVA EXECUTABLE} {MEMORY OPTION} -jar {PATH TO weblauncher jar} -s
+
+## Weblauncher command options
+
+ - "-s" start Wallet Webservice
+ - "-u" update Wallet Webservice
+ - "-p" print EULA license agreement
+ - "-a" accept EULA license agreement (chronjob or batch start)
+
+
 
 # AWARENESS
 
