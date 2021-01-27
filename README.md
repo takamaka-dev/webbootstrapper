@@ -5,6 +5,9 @@
 Welcome to the new blockchain technology of TAKAMAKA. 
 The purpose of this guide is to offer an easy instruction guide to start using the API of this thrilled technology and customize the front end adopting it to the technology or programing language that most suits your needs. 
 
+# DOWNLOAD LATEST LAUNCHER VERSION
+https://downloads.takamaka.dev/WEBAPP/WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar
+
 # STARTUP EXAMPLE
 ## Launcher file example
 ```bash
