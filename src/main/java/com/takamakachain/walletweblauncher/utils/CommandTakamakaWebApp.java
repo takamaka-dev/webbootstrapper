@@ -623,6 +623,9 @@ public class CommandTakamakaWebApp extends AbstractGenericCommand {
 "data protection. I consent to the processing of particularly sensitive personal data.\n" +
 "The last change to this information was in March 2020.\n" +
 "AiliA\n" +
+"Considering the nature and the usage of the software being used.\n" +
+"It is strongly recommended  NOT to allow public access to the API. "
+  + "We also strongly encourage using Intermediate Web Servers, for example Apache as a proxy. "+             
 "";
     
     public CommandTakamakaWebApp(String[] args,
