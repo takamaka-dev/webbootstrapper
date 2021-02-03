@@ -686,8 +686,9 @@ public class CommandTakamakaWebApp extends AbstractGenericCommand {
             }else {
                 Scanner sc = new Scanner(System.in);
                 System.out.println(license);
-                System.out.print("Do you accept EULA Terms Service? (Y/N)");
-                if (sc.nextLine().equals("Y")) {
+                System.out.print("Do you accept EULA Terms Service? (Y/N) ");
+                String answer = sc.nextLine();  
+                if (answer.toLowerCase().equals("y")) {
                     startWebApp(cmd);
                 }
             }
