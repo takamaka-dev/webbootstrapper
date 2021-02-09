@@ -3,62 +3,182 @@
 # Wallet API GUIDE!
 
 Welcome to the new blockchain technology of TAKAMAKA. 
-The purpose of this guide is to offer an easy instruction guide to start using the API of this thrilled technology and customize the front end adopting it to the technology or programing language that most suits your needs. 
+The purpose of this guide is to offer an easy instruction guide to start using the API of this thrilled technology and customize the front end adopting it to the technology or programming language that most suits your needs. 
 
-# DOWNLOAD LATEST LAUNCHER VERSION
+
+# Be Aware !
+  
+ Considering the nature and the usage of the software being used.
+It is strongly recommended  NOT to allow public access to the API. We also strongly encourage using Intermediate Web Servers, for example Apache as a proxy.    
+
+
+# INSTALLATION GUIDE
+
+The hole project is a Free and Open project for everyone to develop or simply use. 
+
+## Developer Case
+It is easy to download the project from the below link:
+https://github.com/takamaka-dev/takamakabridge
+Let describe a few steps to start using the following project:
+
+ 1. Get an IDE environment in your computer, example a NetBeans, etc,.
+ 2. Import the project using the above link.
+ 3. Build the project in your IDE.
+ 4. Run the project on your IDE.
+ 5.  When the project is run, it automatically opens a web browser with the login page where it is possible to start using and experimenting the features of the project. 
+ 6. It is important to emphasize that the call of the API are true and if all the conditions are respected, it is possible to upload the transactions into the blockchain.
+
+## Apache basic configuration example
+
+### Create AuthUserFile
+
+```bash
+htpasswd -cB /etc/httpd/.mySuperSecret.password pippo
+```
+
+```conf
+<VirtualHost *:80>
+
+        DocumentRoot "/var/www/html"
+
+
+        <Directory "/var/www/html/">
+                AllowOverride None
+                Order allow,deny
+                # Allow open access:
+                #Require all granted
+                Allow from all
+        </Directory>
+
+        <Location /mysafewallet>
+                AuthType Basic
+                AuthName "Restricted Content"
+                AuthUserFile /etc/httpd/.mySuperSecret.password
+                Require valid-user
+                ProxyPass http://localhost:8080/walletweb-1.0-SNAPSHOT
+                ProxyPassReverse http://localhost:8080/walletweb-1.0-SNAPSHOT
+        </Location>
+
+</VirtualHost>
+
+```
+This configuration requires the use of SSL for not forwarding the unencrypted password over the internet. This file is compliant with  
+[certbot](https://certbot.eff.org/) for a secure and free release of the SSL certificates.
+```bash
+apachectl configtest
+```
+
+```bash
+systemctl restart httpd
+```
+
+### Apache firewall
+
+```bash
+sudo firewall-cmd --add-service=http --permanent
+sudo firewall-cmd --add-service=https --permanent
+firewall-cmd --reload
+```
+
+### Apache debug informations
+The following commands display on the console how the apache files change.
+#### Access LOG
+```bash
+tail -f /var/log/httpd/access_log
+```
+#### Error LOG
+```bash
+tail -f /var/log/httpd/error_log
+```
+## Users Case
+Hereby is common to use the endpoint API of the project let have a look how to get hold and use them straight forward.
+Download from the following link:
 https://downloads.takamaka.dev/WEBAPP/WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-# STARTUP EXAMPLE
-## Launcher file example
+ 1. Start the application by simply invoking the following command from the shell where the .jar file is downloaded.
+ 
 ```bash
-#!/bin/bash
-/usr/lib/jvm/jdk-11.0.10/bin/java -Xmx512M -jar webapp/WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar -s
+> java -jar WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar -s
 ```
-{PATH TO JAVA EXECUTABLE} {MEMORY OPTION} -jar {PATH TO weblauncher jar} -s
+This will start running the Payara Server and the web app.
 
-## Weblauncher command options
+2. If you want to update the application where meanwhile is being enriched with new features, is enough you invoke the following command.
+ ```bash
+> java -jar WalletWebLauncher-1.0-SNAPSHOT-jar-with-dependencies.jar -u
+```
 
- - "-s" start Wallet Webservice
- - "-u" update Wallet Webservice
- - "-p" print EULA license agreement
- - "-a" accept EULA license agreement (chronjob or batch start)
+> Stop Payara server than do the update otherwise the update process will not go through !
+Here is a small bash command that helps you stop the running process of Payara and then start a new one.
 
+*We suggest running the following command in different screens of the shell.
+Here is a command that helps you initiate the new screen.*
+```bash
+> screen
+```
 
+```bash
+> ps -ef | grep java
+```
+```bash
+> kill {PROC_ID}
+```
 
-# AWARENESS
-
-StackEdit stores your files in your browser, which means all your files are automatically saved locally and are accessible **offline!**
-
-# THREE IMPORTANT  FUNCTIONS
+# IMPORTANT  API FUNCTIONS
 ## The calls of the API of these respective functions  will be presented as follows. 
 
-## 1. Get Address 
 
-## 2. Pay
+- [1. Get Address](#1-get-address)
+- [2. Get CRC code](#2-get-crc-code)
+- [3. Get Wallet Identicon](#3-get-wallet-identicon)
+- [4. Get Balance](#4-get-balance)
+- [5. Pay](#5-pay)
+- [6.a Blob File](#6a-blob-file)
+- [6.b Blob Rich Text](#6b-blob-rich-text)
+- [6.c Blob Hash](#6c-blob-hash)
+- [6.d Upload Blob from JSON](#6d-upload-blob-from-json)
+- [7. Stake](#7-stake)
+- [8. Transactions](#8-transactions)
+- [9. CronJob](#9-cronjob)
 
-## 3. Blob file
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
+ - [ ] **Takamaka Endpoints List:**
 
-# GET ADDRESS 
-To start using Takamaka technology. you need to first create a wallet. Every wallet has one or more addresses. When the wallet is created it is also created its default address.
+SEND_TRX ENDPOINTS:  
+  
+TEST: [https://dev.takamaka.io/api/V2/testapi/transaction/](https://dev.takamaka.io/api/V2/testapi/transaction/)  
+PROD: [https://dev.takamaka.io/api/V2/nodeapi/transaction/](https://dev.takamaka.io/api/V2/nodeapi/transaction/)  
+  
+BALANCE OF ENDPOINTS:  
+  
+TEST: [https://dev.takamaka.io/api/V2/testapi/balanceof/](https://dev.takamaka.io/api/V2/testapi/balanceof/)  
+PROD: [https://dev.takamaka.io/api/V2/nodeapi/balanceof/](https://dev.takamaka.io/api/V2/nodeapi/balanceof/)  
+  
+GET NODES OVERFLOW ENDPOINTS:  
+  
+TEST: [https://dev.takamaka.io/api/V2/testapi/assignoverflow](https://dev.takamaka.io/api/V2/testapi/assignoverflow)  
+PROD: [https://dev.takamaka.io/api/V2/nodeapi/assignoverflow](https://dev.takamaka.io/api/V2/nodeapi/assignoverflow)
+
+To start using Takamaka technology. You need to first create a wallet. Every wallet has one or more addresses. When the wallet is created it is also created its default address.
+
 If we think of the wallet as an entity it has the following features:
 
+# 1.  Get Address
+
  1. Name of wallet which is decided when the wallet is created.
- 2. Password Is a password that is created during the wallet creation and the only constraint that mus respect is that must have at least 8 characters.
+ 2. Password is created during the wallet creation and the only constraint that must be respect, it must have at least 8 characters.
  3. The Cypher used for the walled, example Ed25519BC.
-*Be careful * the password is personal and should not be shown to public. That is the reason that the system once created the wallet does encrypt the password so it is not possible to unlock the wallet.
-4. Address of wallet created has 44 characters and it ends with a point. 
+*Be careful * the password is personal and should not be shown to the public. That is the reason that the system once created the wallet does encrypt the password, so it is not possible to unlock the wallet.
+4. Address of wallet created has 44 characters, and it ends with a point. 
 
 We are presenting validated code with POSTMAN for a common and easy way to make things go smooth for your implementation.
 Wallet first creation. 
 ## Plain Password example
 In the first step creation of the wallet you can spot that the password is the real password used when wallet is created.  
-The uuid for php is in the following link: https://www.php.net/manual/en/function.uniqid.php
+The uuid for PHP is in the following link: https://www.php.net/manual/en/function.uniqid.php
 
 > Wallet Name: 	**Test-Wallet-Name**
 > Password: 		**Password**
-
-
 ```json
 {
 "itb":  null,
@@ -94,7 +214,7 @@ Response Postman platform.
 ```
 
 ## Encrypted Password example
-For the same wallet, using the API presented when created, it is strongly recommended to use the encrypted password returned. Try the code below on Postman platform.
+For the same wallet, using the API presented when created, it is strongly recommended using the encrypted password returned. Try the code below on Postman platform.
 ```json
 {
 "itb":  null,
@@ -109,6 +229,7 @@ For the same wallet, using the API presented when created, it is strongly recomm
 }
 ```
 Response returned by Postman platform using the encrypted password. It is the same response as the previous one even using the encrypted password. 
+ 
  ```json
 {
 	"request":  {
@@ -127,16 +248,68 @@ Response returned by Postman platform using the encrypted password. It is the sa
 }
 ```
 
-Nothing changes from the previous response for the simple fact that once the wallet has been created for the first time,  on server side the *.tkm-chain/walletWeb/ folder is created and for security reasons each time these files are used to create an encrypted version of the password when clients ask to login into the wallet.  That helps the system use the encrypted version of the password for security reasons.
+Nothing changes from the previous response for the simple fact that once the wallet has been created for the first time,  on server side the *.tkm-chain/walletWeb/ folder is created and for security reasons each time these files are used to create an encrypted version of the password when clients ask to log in into the wallet.  That helps the system use the encrypted version of the password for security reasons.
 
+# 2. Get CRC code 
+This service returns the crc code of the wallet address involved. It can be passed as the example below, *signed response bean* otherwise.
+```json
+URL_PAYARA/walletwebversion/resources/javaee8/getWalletCrc
 
+{ "passedData":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI." }
+```
+**Response**
+```json
+{ "address": "sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI.", "crcAddress": "3880" }
+```
+# 3. Get Wallet Identicon
+This service returns the identicon of the wallet address involved, Base64 encoded. It can be passed as the example below, *signed response bean* otherwise.
 
-# PAY 
-Once we have a wallet available with all its features it is time to start exploring the potentials. One of the main features of a wallet address is that of transferring some of the balance towards another address. 
-At the beginning we said that one wallet can have ore more addresses available. Each address has its own balance and by using the available tokens you can decide to transfer them towards another address, that can belong to another wallet or to the same wallet.
+```json
+URL_PAYARA/walletwebversion/resources/javaee8/getWalletIdenticon
+
+{ "passedData":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI." }
+```
+**Response**
+```json
+
+{
+"address": "sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI.",
+
+"identiconUrlBase64": "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"
+
+}
+```
+
+# 4. Get Balance
+This service returns the balance of any address requested.
+
+```json
+URL_PAYARA/walletwebversion/resources/javaee8/getWalletBalances
+{ 
+"endpoint": "https://dev.takamaka.io/api/V2/testapi/balanceof/",
+"data":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI." 
+}
+```
+**Response**
+```json
+{ 
+"address": "sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI.", 
+"generatorSith": "EuSudfr1xH9TEsuxHpTvQw-1gk_BMRqlVgeYw-qoYag.", 
+"greenBalance": "1028000000000", 
+"greenPenalty": "0", 
+"penaltySlots": "0", 
+"redBalance": "9048666669", 
+"redPenalty": "0" 
+}
+```
+The number returned are expressed in nano TKG / TKR.
+
+# 5.  PAY 
+Once we have a wallet available with all its features it is time to start exploring the potentials. One of the main features of a wallet address is that of transferring some balance towards another address. 
+At the beginning we said that one wallet can have one or more addresses available. Each address has its own balance and by using the available tokens you can decide to transfer them towards another address, that can belong to another wallet or to the same wallet.
 ## Postman example API - PAY
 ### Send Request
-There is a request of 45000000000 green tokens and  333000000000 red tokens to be sent to the "bh1-Tes-WalletOU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY." address,  from the Test-Wallet-Name with addressNumber=0 and its password using the function PAY. 
+There is a request of 45,000000000 green tokens and  333,000000000 red tokens to be sent to the "bh1-Tes-WalletOU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY." address,  from the Test-Wallet-Name with addressNumber=0 and its password using the function PAY. 
 ```json
 {
 "itb":{
@@ -156,7 +329,7 @@ There is a request of 45000000000 green tokens and  333000000000 red tokens to b
 	}
 }
 ``` 
-### Response 
+ **Response** 
 This is the transaction generated.  Let's look closer the response. 
 
 - To address is the address that is going to receive the transaction funds and the message.
@@ -201,14 +374,15 @@ This is the transaction generated.  Let's look closer the response.
 "walletKey":  0
 }
 
-
 ```
-# BLOB FILE TEXT
+# 6.a BLOB FILE
 It is often necessary to store inside the blockchain some important information that can be a determined file. This is possible by simply using the API underneath presented as follows.
-## BLOB VERIFY
+## BLOB Verify-File API
 Underneath is presented the request to the API using Postman. This request contains the file that we want to upload and also the tags created.
-When we click the *Verify* button the following request is send and it is validated by us. It shows the cost in resources terms involved to carry on the transaction for the blockchain.  
-## Postman Request Verify example
+When we click the *Verify* button the following request is sent, and it is validated by us. It shows the cost in resources terms involved to carry on the transaction for the blockchain.  
+## Postman Request Verify API
+*It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
+
 ```json
 {
 "itb":  {
@@ -224,18 +398,20 @@ When we click the *Verify* button the following request is send and it is valida
 },
 "rt":  "BLOB",
 "uuid":  "6d22ca3b-4f14-4ff4-b355-09bc29838c40",
-"wallet":  {
-"addressNumber":  0,
-"walletCypher":  "Ed25519BC",
-"walletName":  "Test-Wallet-Name2",
-"walletPassword":  "isEncriptedPasswordWithAES256§70a3ecf7635a0ee53a13928424d1b1a4"
-}
+	"wallet":  {
+	"addressNumber":  0,
+	"walletCypher":  "Ed25519BC",
+	"walletName":  "Test-Wallet-Name2",
+	"walletPassword":  "isEncriptedPasswordWithAES256§70a3ecf7635a0ee53a13928424d1b1a4"
+	}
 }
 ```
-Postman answers with the 200 OK status it means that Server has correctly answered back.
+After ending the request, postman answers with the 200 OK status which means that Server has correctly answered back.
+*It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
 
-## Postman SEND-Transaction API example
-
+## Postman SEND-Transaction API
+After we verify the request we are ready to send the transaction to our blockchain. This is simply performed by sending the following code on Postman.
+*It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
 
 ```json
 {
@@ -262,3 +438,224 @@ Postman answers with the 200 OK status it means that Server has correctly answer
     }
 }
 ```
+
+
+
+# 6.b Blob Rich Text 
+This is one of the functions that takes us to the next step of sending this text into the blockchain.
+This call works correctly using Postman. 
+*It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
+```json
+{
+"itb":  {
+"epoch":  null,
+"from":  "4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
+"greenValue":  null,
+"redValue":  null,
+"transactionHash":  null,
+"to":  null,
+"slot":  null,
+"message":  "{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
+"transactionType":  "BLOB"
+},
+"rt":  "BLOB_RICH_TEXT",
+"uuid":  "6d22ca3b-4f14-4ff4-b355-09bc29838c40",
+"wallet":  {
+"addressNumber":  0,
+"walletCypher":  "Ed25519BC",
+"walletName":  "Test-Wallet-Name3",
+"walletPassword":  "isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
+	}
+}
+
+```
+## Postman Send-Rich-Text API
+This is one of the functions that takes us to the final next step of sending the rich-text into the blockchain.
+This call works correctly using Postman. 
+*It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
+```json
+{
+"env":  "test",
+"itb":  {
+"epoch":  null,
+"from":  "4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
+"greenValue":  null,
+"redValue":  null,
+"transactionHash":  null,
+"to":  null,
+"slot":  null,
+"message":  "{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
+"transactionType":  "BLOB"
+},
+"rt":  "SEND_TRX",
+"trxJson":  "{\"publicKey\":\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\",\"signature\":\"h1gmsL1UZ4w6uLucF8HkOJzNsIWjyT5JxZ9cKvyOvsOoKZoU2FhVbG6OzPjkXya9YFKgdPk5NwVEny8IcwzyDA..\",\"message\":\"{\\\"from\\\":\\\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"data\\\\\\\":\\\\\\\"TmUgamVtaSB0cmUgc2hva2UsIGRoZSB1ZGhldG9qbWUgdG9rLg..\\\\\\\",\\\\\\\"mime\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"text\\\\\\\",\\\\\\\"tags\\\\\\\":[\\\\\\\"test\\\\\\\",\\\\\\\"Rish text\\\\\\\",\\\\\\\"testo, ricco\\\\\\\",\\\\\\\"utf-8\\\\\\\"]}\\\",\\\"notBefore\\\":1612374783095,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"xpeLdBkNCzaXx8EaokK-JAS_oK_4dqs5jbc0JY0BvLc.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"POzz\",\"walletCypher\":\"Ed25519BC\"}",
+"uuid":  "6d22ca3b-4f14-4ff4-b355-09bc29838c40",
+"wallet":  {
+"addressNumber":  0,
+"walletCypher":  "Ed25519BC",
+"walletName":  "Test-Wallet-Name3",
+"walletPassword":  "isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
+	}
+}
+```
+# 6.d Upload Blob from JSON
+This service creates in background a structure of three folders each of these describe the state of the aready sent transactions. 
+They are similar to a bookmark used by the endpoint transactions service with three different actions: Get, List, Delete (see section 8).
+It is important to change with the address of where is the Payara running, substitute the part of URL_PAYARA with the address of the running server that it could be for example: `http://localhost:8080/resources/javaee8/uploadBlob/` 
+```json
+URL_PAYARA/resources/javaee8/uploadBlob/
+{  
+"message": "{\"field\": \"Test!\"}",  
+"addressNumber": 0,  
+"walletCypher": "Ed25519BC",  
+"walletName": "walletKali",  
+"walletPassword": "11111111",  
+"endpoint": "[https://dev.takamaka.io/api/V2/testapi/transaction/](https://dev.takamaka.io/api/V2/testapi/transaction/)"  
+}  
+  
+{"transactionHash":["Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."]}
+```
+
+# 7. Stake
+
+> The VERIFY / SENDING TRX procedure does not change ansd is the same as described with the previous examples. So we will show how to obtain the list of the Miner Nodes where it is possible to place a bet.
+
+```json
+
+{ 
+"endpoint": "(https://dev.takamaka.io/api/V2/nodeapi/assignoverflow)" 
+}
+
+```
+**Response**
+```json
+[
+   {
+      "address":"E3Vi0scwL-qF11SisQEyszSSAJUVnl_Iq9AOj03QBrQJhLSctq8TV7hhunD-D25moQptQbcoUTMssnKtEFExm1iocIvF4XYrF41qpOkuCTg6kVVq0Vxk_3wrZT4gmxxc3VHNDFj7L49QYnZNUZ_7DqolOXjYdhejaIPEjANkBmaSVph69IUgwZQWjWOf3c5uVjOd_truH8_Gq7gB7_PdLVl6i2hoeLmfFc5xqk6ZOqXhdXZ9Y2TxCc6B9uqUHuiTBxE46zTXX5xfzFw7IVnRIA3yAkccsuLXrXu-DhS1_9sovBMqCAJFfyksqfewHTxJRauAf0f0DE4FhAoAYkmh9Y7BMj_Y4HANTOaGQ6Ab20mhw0EDy4WzAyYan1VVaVJ5uOB5BZeWM8jA6FWwY76VvnDpqgOLUZeIG8k72_7dw0w9qVtqoVyfBYa6uBTQQ_HQNbd-XtwnjOqLJ4ZeJCg95s50YkKmH-8XmL8cedy_X9mV12sPAbslLVxI3m74KJwxWrkzJRDWjyEKtVHwoYWewXIGr1JKUtiyBpSs7GcfrMUFiLZrcuxNncLEV_O5l_1y-kO9B2k-I7FkKdRfEenGlZT7LaKTdSlhrFW_F-v9X0VYurC4jU4HVk_Csukk_pHAXVrRjA4k2gIiCjO2iQRn9dtCSNIaOckBxGg-PH4M1_K3ngm6ooduUwd9oMvikjRhiC3Iu4FKR0IMWLRU03llMWmPl0E64YoW3T0mdfpDdbE_z8Mc1zqTVHu0pI7HghtP1lLboUJ89TlxfIr0Je4MQi4-vnybPOhRjA8kUeEqCqhpgMZdeuGCc_Rwki1ge4NSXb4JWpO9SZp33DVadIl2B5chRbJP4NO1xD5uviycqwYpN6QM-MoEk1TxnhT3JjNtjWfB14GDKn-X5r-dPOQzDi6Z-prREdSzCJ7d8dWWMAPOyTM1RAXYHMsGYq6T9Nx4B8cNh4sjOam2zVFhosKocN1PIEab4156QXkIbN_SmEU63qgQOA4fgs6s-ZqcPfoB59PhuKzgZ2TqCJrZXBuhFOIQ-zaw_CyUekBwpBEKCtl8VGhlTyekWo5gVCYEoaWKf9hMOezuTY7nSTu69cGcaT75o-Ba-EHDSGnqDZD6X0Q6fwm9FH8qyQsLT69z7Zeovdc74aYT4ZAzeDbVzDxe9y1xd5BmcYBwT5BNFN01r7AALYasqVxStnMigaL0rhwBplE3WivT5lBIwZVMeMKloXAuaHFz8p6lCLLoUtbcnVpCXN0gmutlUY9Ecf-dtRNFLKKdhQINHl_Ht8JruscmHKStbOuEurKjLJZDPKyaNWETU4fXPESz3uAL_6Q52RPHUlavpsiviAzZ4RZfITJ99uQxOTKDNR21tph7lBhRcFvGEYeozcGCFNsY9_q8ETkimmlo_DM-b5yj0DkOdGHJ9b_EHM7x8p1f6Mn4ymzsf9vMg6PB9EVcEOHjQ63ftbZ8zLrxJnsAU1jcjO9Eq2mikgUr6tWvIel5Y8JizpNDgo5M4DIjuQSMtBHwy7I9Aq7KYbfeC263A9E7uiRws7a1hXWYK2kcWkFpzU-raBQjmo2zQnkShMtJNUYAv2KGgWI_8Z_QsTPjYXMwLt66Vrqi1CrZM4-lyAh_Q1Ujtz9JNEaErZ4AWv-n81nOBYPgxeD1XXZsp4vy_PB04g4s-smBCU1s07ghHtbtJoseYWUDn0NF6Zw4166khYjy025YirGCb_MGVUC2Doa8tVV8N24IvBzn2pPpCpUUw4ArwSwFbCr-msIzx5o-DHprjFDAvcFFSejSMeVh8Y4II8_VZAaO1redVk1VIzj4LmMIxMYsnPdVfjAR6fiUMnJDSxvj4XwWwzEFXCI15i3AR2IGRp1BacDRnl7rn1pcdvMPgovsz9OWdEUJk6THafYnnwpiZ6DgC0TO8UfwETXd4C9fii5QIDBzmOFwXvVPODlIQIuKgFUzdY-LIrcxtK0dqVgPk8ONjafQKS8G0EqVe4bJpPKwUOq9HxCJFmFg0hyNQApSXce_Xey4yukqGOEf5_UdbE9ZYt2NeiG-iR2Mf88kiPt3dAhYWepIV-sn62DFEgxiCHrReGz9paQuDUYzSMEIL4qoDUPj6T7ywRtDhJsYj60M15lY-LkBO_pR7zOoNqLukfRX6OGcGhJwaJi0wyso_mccVEhkq42bFWGGza2umJpGfV3ALeWRzqZTZa83s-T_j71OOerBL0YmKBAfJ3rYziFw_gbGS2GXiw43nmAW3I8e0NlPdj21mMie31NbmCmtHqy-CwS5uMIcPOakc7nX44gGXNP2fTgybc2kez0Vm8ZKpl3AVw1tXs-voaXAn_t9tn2jRjE_9YmulRDjVMJPzop7BNDlgf7IHXBnBW12gFqYVJYeAO8UZT14WlXNk0KarFOt8VdgZJvgW3MzbdsKWM77PS-IkpQgexF75QHwAV7BLjXSlAnekEYPIavtAaxgF6Ru6Ts4vwPsOWYGu8JOxnwJqlIWFxxAm4_iCY9zRmoKWtwkWZKsfJo1UQIXeBlp8PofRN0RGn4FjXyiWBrNIhLeOj0w_qHTmhGiTtVdzGtl1Ww--gjnSsBdyUw8-sfcuqtGUvcsieQkxwVnzCuSg6OzfvknVQ6apnaL0sORmENae0-1yQmCGMylcNI4tGkBQ1qDUMvQo8zuF1anKG2qkU5yJQmta_FUGRvGmvF5K7ivQgzpN7jItCrB1Dcx0vILZmdhU2_yHR8DwR6jzHIYCkJAItYegtUgs-_qBeOHq1ke_YiwubsW7cexGXhrWKLhFaivMMNR0PBqOm2idPTed59t1BMka34QHkcISHCdxGdD76dtvTNihS7wEMUWkOLBbHfiBLfJXJpy90yr_qrPMzGdGongegIJ7I1N480p5tw-eztGj01D1-EXHyXc79pGgpHPuHnCbgG4-lE-Jbr1cfZs2VyLje94JOaHsrKyGGvFGZI3CIUq0fVSye6TSebC0DYfKLa4fy9WYFbESZVj5e5ezcx8QwrandsCoFURdSm8z188AgxRU6ub1_ocS1RmDZmo8shAwEd4I1gHzGofvJt1UIOBGNiC8vvyoeI-g_OJYbv6XzKABSgLr7NhSwsQtzRc2ZxuPcQT6rLTLre0xMd_fJqUxeKQHZTkHecwHTWjzc1gcoe_c1unf9E9tHLPS23__nTjEObIYTpeLTvb5xVZaRldCaVSjDlVoZDhtXdP71zkzJ8_jQXpoxYxIlx0sk1BUqeAdR264WDIB4oH6Z_ecVJMDIWc30aHCNOEm3mKRXyBHilgC5uqYgqqRUFOy4lBEUrbSpgUMhUgS-CB265DCnx96gj9YjpD8DLbJG4wPoGp_NFd2KC63yjTfAzDXCFhBYNAjpJYtTUcwE3g2hvfc2IGmRrF7h7Sne4OgFBCKTRBVlcP8yyvu84DVSDstHgCs7GGxg7s_zfJ5ts0TYPgBAat2svmF7uTXbfFHajFAgxlM94xb0oPchKHVLUaLq7Tk8i0rFr0arFeWXP_XEvYbXUqAvCLrEyDbpRrKxwHcdBSVwZAkVSkisG7Dlvb2AlTAiHMWMCy0inQSdMrA5mB3yzJHCiM2VEyWCFMyQD86KIw-QdZsANjAmUvm9m6RvvXpKPNeEIpePzzI1H07twCwDiAtxzJ80Q3S0C1B4XGFo4Zl88dlqoXT_Nax8VQk31vSjV4bzUyUaAULIakQtWPhp_MFIwq1OIr64-L4eGp4wrLZtr-o_dNCheqpCKihxRPcLqHaAcUaaeMMZBcUS3VDGjVQxoc_ecnzAz8RvIfQwSO6LehRORm8v9AFbZFAwM6nZg25bmqKLgtqerf7Q5PeIxGwPzEIaJ0U2baAQM81DYfMyjxoyGtNMlfxXn-odlsB7efUwu-Eq8rhGIqqVh7eJbh0fCI6jXza9SwDSLR5aOUnBeeuRcp-xMKpGgEZw3j5X_zr9z_3HOQ30wruHUyYF-C1njxudKRABlf3mByDvwfK6WVknSv4AyH8CvMxCLkqvJEhn8KJaqFGKbPZ1XkFOqvmdEjjL3alaiw6UAyI9NoBvZ7eQT3Of4WerYX3Flvx1gLYC5Up84JcflAE-OjfBgUYaP6GkQu-4ozmE5IzfAoHwh7hMq5Dd95uOMEYeKPrWj5Uz6APMtFtd70nZbGvnu_dMwB-SdPtt6y7Naaphll2_7r96AFbjS9cppHJ8O4VPXuXeIWTd4mO4bbclp8FKi0UkXVlhBY5oDAzyolkMW4fH-0qgXwssYuBWNCRWyi5oTLkcKHHNgQvuAU049YADeLKdlKFdLxNSHBZaUNtdDohVnPUONnyGnnzLhXj3wzVpxOpKAWAZ3HthtOHSapo3kgFoL4xys2AH60pNAIhVsqbEh-6FJugr1rW1JmIs1_L2YcKdoex5ezjJkRc5kTys3pbg9ZsYiiCQhAWVFXCRqAmEgr8iELj0KkWA6dC1K9aJfhlOnvMZO6N_SC06vTQ8Z-D4AQgjb8Xwu4E98GTeNmDjoVuy5Y3YsgtcgJJQrNMB1Dt5FWzoQKPAK5Xu_xLXNyYHFv1eNWOT6dpkehVCf3N5cdfy1FCyGdbzY6E0YOnKLQtM3_xMm5HOgc_FQ-WADtuIQs99Mv4kK28OhOmu95cSxUFikshd7pojk3P13_flQsrd3TOUoFksG8Edc6nQNhhzPh2EirRGNAGpA0cL1kmFj0-Nfi78vi_-esIVIzv2yk0ALrYR3ZYhDejp7QpszoWDkxvKkHqnv2nCvSFQYX2We0dcpTlwSzRsh789NEHs2WASwNhLXZJkAAXyyZ5sWxJUNXJDls1ML82QsjLUEO5yu62lxVaFgizJDwEHkdzWvdLhbNK1NNJy5waq-peARfURujl0ltC7hotwZlXAuSWYMpwMMvfJE_se6swY3ML1qN54XIfWDshr3whG98Pk2zjLvP0dU3izzZIlKyrIIzZYKjYAtpRGQQ2LNObRYQE2uIO_AOVtwwneFGUEk0jrw38Z4A0rjbg1wDltSu-jsVYCQsF1mBGXQj8WS7iOnRsSgeR7qqXw0Yq3Bgbd1sYb_HC8eMg5DjDiPWnVygGX2mH4V5hOlflaBSi8pX5LWb-lhovOQE4mGbZjYDkYTrCUq-_l3DX6xMEck80z3Dh0mSUr6O8kRzC9y96baZlMTeD14E6XqLyPndrLB2196b50C8zCdZtv2hk1tViv1Hk71wjwpFYqiFBxd7u7w3eWI2tpbSciGdyYWjBS9EMCdTaJIQCLVz0cE_7Wa5CQajOIbGxohUezB8gzVXu1DGK6ablKUCEcQapakGLruupJQi3aEU5EusHrhE-TgOkp6eX5cFbxPtgjpXhmGnj2R-__bJNVuSuvNdY32Kr0bAg-bkUyTWWJf6JivaRNtrUwkdYgiYu30X6Mcnf2htCo2C9RlC4cjENAw1o5Hfq5fKtauvcucaMapp14MTTIOjZwkF4XErG7MTbjl8wZc1f1rEK8cnOftaepIAvqTuDM020t--BzNXUIEjPHqel1zoh6GA8hUgACvcDY_j3eSiPtxsrZ5REH_qQLALFqLJ_q_eeGAD5J74A1ZduDhlOkq4wyikEPaoSn3XgGnnZORhGQ-H1is1GRByP2lunINrkXh6y144FBWEVKJppnM-siHyCeTLELUYUqNXbqeLTDoCR1LlS575Ddh2PRdu515UvNprPlR6gSBmEM_rJY4D6Rh3d1fO9A7bcCulzZzx62H1PcZWs8xvWamiJ2giqatlXQjLVgIvyL2BVCU-bT-6msU9XQXDV8QViK_lKohRa2o1_g2XoeVzVBJlfqvGTbaiTm6ISIP1ojkUQ50xIEbjDtYCIQ0I72cCZ57ksvgzKGEdY0K5IkB3WgP6PArtwBB7prrXWiWOrzTioqd9aRZlnkHYmgVemd2r5pA2Fbt7LeRaZMBvBUTejjdez2oopFEYQU7VQkQSjByoE7X8MEl317O1GZC_c9ksAKHz-DTr6jtJxXu61l6a6xThsZmW9Xi35pSxjOESmr6fRbkxZ8zLE8WiZzcl-onQ2SVr_-ySKXsgavIRjW5SYG-p-cnwaaphU2cZ_Ek6L77WmyF66ltEwYwGyfrbM7y3VLMhHg-S2VIm5pHudZbo_ApkR5lcTFZmH-UJtpkY0annF0A1bFE0nZOxUoJb-BLJUYC9t92OotRsBVRld5tw2muM8XM2gNXhlAOV2SwOwcIPaEjbbq0h2CsuHwD7d6FJCPlAufXe8EWElPVJk5E9xeENr16Gsp8X7fr1wQxhy6R4SDeFDcUQ86U-PVxH9g4231VJ5rt5bLXbG_eAXPUDzlyTjZxusLxaVdUYAn-_2NVPPC44hq2I71oghlC3LhGx7IpUc1rTM8SQ4U18JwsGVldpSle81947Zl7JRGgmr0EsrUYjIKghB1XYRRXaUXH2shdwiZHRxVvUpMiig22LW41YfQvwrRJKcteewVz0AyuP-hYOFhpyAvqdOXLVdtzpUxT6JsdCsVmyYX1N5c5ZovLtAMulhfz4rOcOTgeU6J0PhiOaUtAQCRGH93yxGHU5mwL2rNWSfboy4s_6m20cwV3pHDAho4hokC0fwzkj-mWpMfEmF1ntUAHJC24VacnoGtn2qya0NrEw2mgFipaC1l7xGWdYtFPfBZZU-y6vOdtrVg9Ns1eadYw5R22mvZDCL9ZJvDUEbrtzL8p74zpmHsiMCuky0XpdD-7rTnW0tFMwawG_G4WBRQirf9CHjJ6l-huul9Qxk2Ha48Y75srMETa9xY7Efjlk7xooG85T6LL1t2pjUjmN_yuELPGqYYyaHPtpVV31wcNr9D_6nRTtJ6hUZMwvP5eBnq1POSE0cb7439K_4kzcEWjkDh4oeZ2qpQ058UGwwZURQAKufE4l8BX3cmkFsV3to8q6BRpxFZfjY1zbc7ywblnwVxcqt-gP6D_wR0JQUbg1Bmomm6ligq6ywBHvdpNuHQm4wrkxg2BnJmaFEWsU2IOyLyo0IgMqeJVDqGPuSqfQmhUFMvlcV16VGebbjxFPYOGKSV2x9LZ4JqtCsxMBtSdTPWcfLQ-Yu8GyRU01zMECFdhRMJcr5siFUVUAae3GOKSAW3RRdv_kNnJBwmXiO3JXJKNAL3jMb2ueQBjBjDOXmOQnzznwfcXk19ohMm6-4UcQFBHkpwG88uaOgUdllA0EBFBTl6NR6r4XaNUwXy9hhwyK7jW6__rmIHo85WISk-kRAQ2o4rR2vKIxBBbHwPwvchjs2ZyFoMRMA6aMvTKcxe1OuY8fsATIw9pkcKZsrvPtJXA-pVvtbP1lYm0N3Beokl6o_XA1WRsSy8QlDWa85Zr_JeBmOJMwXZtSpkcTzZmVuQkTmrV-3I1EgHdQk6byKZhTYWyBQhxE-gHheBbZ8EmrdkLzqMNzYY3ND9715TZ5fYCDL37dezA-BAhx3AiZ6uIZARQxJ2WKTm4gY6tyO1I9n3Bkg1Ezuk0NGFqa2JqhexgqvslkHUi3A15Yzp2IIk9V-ROkRHlSVVgi8WZltC1gvIrBszzF_jXAyHrKM5DtUlRo2GZ85n1UAilTzT2XEnHN8aT1ty_K8rJ3VIqyuGwOuMVKURdIisZ6XuVTD7e2rdN-kWPzcAyED0ZxCGGqnxHCVZwODIJLgQ2Grn7DDp21mMfeT4kI6IadU9qM-fjawSNc4NIrAqyABOAJBjD7MZGppw3pRb7miC3ZvjIbHJZlk7-h_i5nex_IawewuaIn96v2J1hsXVJ4Llr39sjHEYh5_p_jhTY27AjCQihZLVvEKApUKmOb42NQDQie3SOT2zT5vg8ulfov86TAHcMRgyEosGM2Xk8gGSDIAbzGUbGYhZCqzeIyTlpB4L8l4KMeTqtMc42A-IkqdqY0T31glp2K1xudni1h2OsPgc_M8yIYSdKy4cm6UID52t-R9fMkl5CgEj9MFqknZp55zh3km5y5BEVBBL8PVHSdq3Y3VW14zM2_ucEmvkruRzyO6IQF4qt0BTJiZ5s1zC1a4ow6J618Mhomr5hAHujairmYC0Dtfy9KQKU2C1nZipIflT0vRry-SOKg9xnPihexiF8eTerYNnTriTewdV8rprLsNA07MTB_T6nEFCm_0UFAYmqQW8AvJUsT6xejVFnYIV8ab2Ws5AgT3xTM_inGfX8yek4fWwIGcOsZoL35e0ZnMSn0T9fZGy-l2BxHbeFp5BGYwY2EW-hwcFGmVXwTsCRq9znRDd3jccIcG1kqfKduR3KA_3n953x_bJtNyd4WUxGCD0BXhyhOMHlJg4PMSLdSKWXoYUp-EEttxHZ_AS__D4NC2cw6tj43k9cIk1JKMhq1vEKpKY2b7W-FBYt_r7HoaZr92WXicTl84vicgK4zfbm639tNiA1EZinXsj_tiI-W739V1qEsu4mIKBBG-lLxOKBiPXAMaM4cguhdQL-ULdgBXG6a2Rs-RXC3Ic-5iBcQ6XKrcCyZlx6YyuISUe_KVmeGQz2smn-DWqt1fC2b9ZOCQwrz0N0fMf87gIj2J3p3jpe4dfsBbI0FbKLHxt7gp0Q3dYWUeT0cvmzKYvynef-trzUNH_Vy_ackjDZXswNtMFQjBJx_pSyZfm1p8naG5Nkb-gbb5KJPTyLL-Gh3mYvEKczAEJo34yreiPL3Qrx3wlAOgK4Ejfp0png5B5YDOW-PIQ0BMRCEW2Ikkxu1TnjC5ROQDr81wLSW1QBe_ldnwQD8st0XjXuX1yAB5uYnnoiu5WDotF38R2VRtUD-nlS6zuWQ52m1fL0QV7gV_UQWSnIssVfjfXBiIWin6PyIY-bLON8bvJR9W5Q_KRuiJ9EeWya8GKBBV45-oNxyHDwJDqcxlb1yhXh2gxL6RfGaYnqPFpiPsVLG3VCPu0j6YWsAhdNGRE48ZdI-EUrLwWyVIgJduvGQSHmlu-HBcKiMmNkZR-AWiHGLlSU7qnW6m-QD3X94zVaUSkiPTAIAOucUCQNT5Vnc39eEi2dLrHYb-82LTEw97EJPy3mPjdiBPYRpstBMLRSP4ilSxrqPBo4lMa7LEXVomm-5E4OwJT7If6goywqj-hqwFKtrbVq1DP_potwypAKhCTYC_3NDmcS66Z3YkZ7A3QgzcYdOHogQy_5CKQpTx4XXVWIHt9YIpdjGL-48rmVxZrzAO6JkPwgpCoGqhY5Kp0xlxq0lNSSxHGEaUh6y0zpulU3_zfklgm9qQxDWi1DOg0KPfkm0ISpJpEAQT8BidOVyDne79LxdRmNIFURrWzH5gTRWv4zt9xPqwASJFGJ7p4gKSXYx5omngZGb3BBdRkhSTPBlXDAQuXa5qSMUEmIVQqaf7kAd4Q3u-dE0z-1flN144H5HQ4dlqapJ9zspsciSboHWVmPJPlkKf5ZIgcR5npMkXDtrAFgYeYP0mNjkKcKwj6o3l20qpclj4zN7cwUijc9boEkPVZmpniNTfet8vHRhb-xyQhukaJ_nkHbIvmdOqK96S-dlAwcQnhi3YrjPt2BVKhtx4gtiX-WzV7nnrlY2MjyqgNGVF01OtBrwr8CauQ4Lh52LEIIDo_pDO0vJtIitzjMMXZhWa661ZwG54CuZxmjNdoPF9X8ybXpNcNC4BjBsOS5owSsIbGF8Fn8eXSO8zyIUDXFB72jpqC65rrDOmFZMp3gLjAacjIsYyCkzUAcYfk3-2ptU6bhV7g2lznqQlzt7yYB7QaZ74fLDU5JC96qNAq89PYwNye71U6nnLffTcrkK01gRyDs4g7p98JtaD893T7yfjOwJE38e_jUs9wm9o9Zc4i5_dNqm4nPvqvZc8K5yAOyN1R0kF4X-HDEkWEJ_q0e-TqJxUkzf4c3Q_RB8Q-3caF32Xupu4YdgNxJxSC_iXGnQOQIouu-wyBM3kzHSVD1T82KhLKjiKEXiGi2qw9AfPKD-nafNAknd-cXhGC-nNICjmUo5xCp9AtLtTR8tCKsiXrnmesELrXQOCdg8ixxVhKPTF5DCZlCzRbRtnAtuxZQdXn85BcsXTgKrxRhjjsWfKl4aFclIxDaih8tRz1yR26ep2KKILiwM9dJrWsu1yX8ZYmOkjIUXU4l8GMccEt9hHbiwCfp3u27SMXj-9s0wXP8A0RywDMPY2fK4ir3UURFXc4XIY4K_rU08hJWR4XyH6oNUURgvbTGTlADgjUbPcNiFzlpQunPqjstu5FW8kda2NIGSbkFUAzpxmtTGQKmDdAWns1RpY_o7fMM5xZbQNY7PT9HGikjzg-u0faoQB5KGn2eND5Z5E1QWW6Ei5fm36rY-GgTvcUIAx9xIH3QVXbX4ezRhU25H84VACPn7tPwRxG8_ch-ztpAIkqHe5NeGPb_1er49VHQMc2MhMX6jvyk75Pa4YCY4vDF4CqIpV3Xgtl1iGa_VvgMwc90A-3hdYjDMP_SSGYhnnFU7x64z1Z0--am2Lzy_2kocLTaCo1YO6CYZcaRMXrQxgSosKx8ztK4m45gqslM5XWwB4QWmrKupfgRpd0rEaVnRSvjI7pWmzM0_82ZIyWfrtk0uQSaLhp4QMztKxBnhqS7vNriBa0zrEbYxLV13jKDDbwPAY04YpPsLJu3V9DzjxI0tz8kMQunvhrPuDT5_usSU5R4ye7XEDoWVlh6tGCQNb3zofgRrBSRFcNhQabURV9lyShNapcaqnCGdp8QCjkE6lFGBR2MvdgNm8KfrCBaxZU11yqgqqSZvhuqSl0eKOqqXcty1HPxeVTaa1V93JklYHTNiiBlJciuvGxMS946KZX7FFdAURea_ajDozwn_p9WUrynYJ4lc5EHtyW1e2kbjbeKp65BngnHi8r2cbQpTv6_3_V5bGbT5W8YV8zxjeugCoRppKLNiAGcmBXikAbM3Nb1VabcG8LeExyySwkt-kZP32kkpvIcbsAUOQCeep7Gxrta_iPL2Wa7ywHCoY5e2AiOHT1LmFqpvgJvVSP0psObRJsMyLhDPiU4VrUDLsDxFocEHZVeHWA2lsdKfNsRYW6PTy8U_nwfhCARKDOHQFjsVW9g57qmigZ5fqJPAPRNCocrA8v60VIW-zD4HLoVAVkF-qfMJ0x66nIZGLgIYc7zTFezSBZcBfB4bV9uzhHuxMZkoylu7Ac62np7d8V8l8K5QZcIjYliwRlzWRnaX4ySNX-xBloumJd0HTmF9Fs_xAZUY5YZTxopOsdG1yFs1f8sLWG_FVCCLroC0is7pxtbfAUxV_hOJiYUKe1oozaVcXWV7GKeZ6nhyRzhIYbG5TjNOLBnXIGl76a-GBylm-Z9pbFNf8U2HSRwR9n3iK3azlrG50jGqrRneyl1R3iCMHO3g5doPJXKjP8tBvCpuuHeaPeAD_PhFYdr4DyWurQz0mwyYIgj3EG1xtLWfzfPKG_Vhe3kd0093QJjk15bORKel1l6hZV-yDGe9M8ZifRpVh4AcwX0tQ_9Ra6w3jOWuxpjcO2SFXjclhx3IRVGp9ljxJ4OExm1cABoVJLX5VRTkGWLe1lv0BSPujfR4Xn-_b5mKN4gy8bfzw0kyehlnoIBXJNhFnFdjEyT-G0lVsF8ebIMWuBy0oReJYLFyjvvvRy6xhOXhgn7BGikzfvZt6hLSisPwqgMVMNmkbBcZ9nCW-UN6BOlyeOhzv4kGeW7p2lRHU2470XDME_nehzXwriWu90YbzQDmZKSoK-KwWLVmBzFvzEQN2sINpDV1slIMCp82TqjWPtexyj3hqizPMBMDWSmlTqlIgdYn8EVmE5n89Go95IQTJ2aZMPeiLlsExeRgxEWMkBFXtmz27jA7P2HHuR25iwW0vyrLXZ6QigHN2KQSIzaGwdAKIbSsn6aqkwNSkTnOmsytM5bEOvD8eQngohSF5jgy8FRs4keWDCxBphsdqLj8WGdNQbhXi4TRZfKrY1uk9IHmPjdS-0QHehTwGu5QqkxhwQh6xnyDyEVbf9MMdn0x_b3FygtUJFjSXdHISxCBTNxrKNJ3ceUUPp4q9zArXN9UAHdY6hdkGForES00hkOXUGCgVkNWEHqDias05crdnoZ2J0cWahndpjImoJBb9tmKT8j48lGo8YSLzyBrW7brPOjxRXZHc4iIdArvEnrXOMK0H4X-ocEQK3PqMKbriDXBoOv9DiQPL2Gxjvjc8v1Wr6ukm2UDf4C2hMMp8MOMy-0iNePBENGxkNfbXjLf8y9EqCY7ZtOlwMsT0XB1ExgvCj_ls1iVqLJ5kyPRZpJqtdAaOtweKwJyTm2byz-SGUi2QSfQISksAbRj8kzV_NqIu44DQuyLSkfyUvc_aJ1s1xTqvJtRabl4EIH14hRL42vaZ7oifxNUv_n8p7uDOF8UP1VMb0aSTkALIgKISpe13q11wWBtXFoyOsDg_bQKUH6Xl1YN8PKuXGW_aYSws556PUAdYvDBAhzijV93CarIB8ofMtuPxNu0dv2z5KVJO8hhkX6WNXpjqZ6XJDxRY2v4gnPdOosZeM6tg0e8XKUouvvgE27zzlCV_vi1DG4KSQBZhSD7UJOsU-O1qrhcRbU4gEZLYQF_9AQNKAfupGxe4LR5sf9bqH_2nG2PbCRFLrKWRsGnBjBa4M4MPLfVU1zCaZcQRAMW0CrWDY_5fxEL-c4wwZibKQ9DJbcCJ2S6QzA9qos2wpJRsxEUGoO9mJBrdvbiDN2Y__yUWYq5_mULAMbKWP0o4GN1C_OPV1FlqmPpGYjsFoOPnWWTfx5lXX0ufbu5cPb-VXOdLZ_mg9yXsey0AUptsP9BxtgDWgjgZyyJ0797blesLeN98OAjiKLtCLEHmWdENV5JqdhqgHRdi5r6Vcwiqx4QUpmFj9ec7BRvxzQNmsylzmA6bVn35Nd2rJY0nxANMlHte95RS1Q5hdOSRCdRpUTfxkqBRT463oEwMyTIOtEKLlaRJD3KI7TOuQrOyx8fj9Xm-G6FsrEaY-P_FaMBQXdKUXFFdH1ihQe4SXCvO9GYjmlkFzZq1LV0phgiDn20EuOeU3YSrpyeYARAVkdxxazGe3G-Uc2ZLMstLvQUww3OceIEpELiDbTlIouPMASY3x4te836ig6TWrxUfhZtQVILxBCVRczcwL5xNfAPBAvJHOqvAg68OfctJnwdFUcpXPsMOsZtsHSsakNq0rZX10TNjAdhJCI3USFdtr5ZJg-svxq48PC45f8ay6CnrOem22Y08xeoaqhRlkr-zknvYzJiPa2mhmC7rC6FCl2U5p7pIhfOmCoJ4DbIrBwcxZCbklib6iZ--St1QtCtXU3mFAyNUY1uEsIXfoMS6Fk-j8nSU10PQO6YAB5hSKhJeTPXmNzDcjPkvgmBbWU7Gu_N-dZmK1HHqt5TTW5eXhLLqPdMieCJDqNrLa0GQP-52nU6JwGb7kaE1tA24630fkTr7o_ZCVkzlH-kTdXOP1MuW1ZMIS94dUXIQZ7F10k8-r1UoNbnzz4k0NCQuxln11hFmSgk3-QFM3dXKqkleh-5yEvjYGFJTLZBBvpAKr2WXu0tBiBslk58TXQYq0LyJm_ZwmUmQmHXBCCovqgeZPRqJZLa2I0f0Xe9QzTFBNKc2ZzyBR9CAVd6TgQN7R2V7eR4HPlN79ZpgsT7YQKEFpyPPI1BhVloy7HMUy6BX9LGO6mQvIKx4IVFr4RyoLtwUDzigTwtAX3maQLXamrvXmo_qcjpDtJFR7JSMzeUZERx_cprHk4YeZfUGKh-gZwjGUlty8u3lVJr_OMMo8rIs-mwANVK43S7kz131v6b7xpZQXJxo02KPBcp7lwlD3iVuNjoRBqhYY7z7BoM7pdvXFZF-5CC4hGK9OOycrRi1p_PEcbDm5ygfEACPDZzCPQqnEAmhB5p307t-BgoiGnKSnpJYD83YxLLkbKRrRylBzkH2QIJvKFTMxzt16rrrWO_ZgQtrbrsdhrgK7R7Ghmc8iBrRsDc0-Y01h71l9JQ6CKk0vSB-NOFC4i-qs9Dguzy6bxTTSUmOXewYa8vhZ7D1HIb9YZcEzBK2HDTo5KLQo_eXM6ZvgEEpDYtP5QD8M_dFXDRQmJXkA273Qg-NGWMmTxF3Sw2f24-GTV258YaABPGaCxapH5WoI1-ZNMElF-Az1OTOXIWL0IZcF0z8mnAYNIYVWifxsevugBbpa30O4znUkv-gly7GE5iFSyVAYS14XFDkuxCCdYbi31_X8T4kIBLZZbJWXd5ruIr_fLhjhD0LlI2lZE5U5moo_r2lHGN6Bd0FdJysp3DdCo1LB5iKBZFLP34_3JdeZCEtZjEiFQ7WMTC6izdrQKCnsVKLAAb7oJuHwtL7xbp1mOTqUzbCPegRxpnhCv0w3jtTHPRuou4Xy1Xv71-5zYBBX9Asi0bFtDoKM-WDdoyNEupw7hQ5nUXF-QFhSIF859pQah1QkzlzrDCKvsSjCOcJSbZ0Sj6Js6jVuUjDevM-IlZjTwq7R6OX7J1hZEMo0zTBWqPwB0440M1whThjakppHIbxfqIk3MzHg8eyKgcmqQ8lc-RGqR0spraVRXlIwWr2Zq1seVLK8W6xW1p2G41cl9_3zKF4dYVWVpilylulPMZ3-B8sf21meDsIxv_rIc42-PKIDRhwdOf5_UvnjA20wkxfwN6kGlJCsvWAMTIdy6O2-HXklCOT4lKE8FjnKj-XudMbPJTnI9XiO04yIgQo7r3rCgasanu2StYpTEx7WXfjGrfGJKE5fAVLERiJgxuiTZPmsB-5cktoqmWLQL9upLy3gq4fjNo5gdONx4_UM7vAVi7WaLnwSklzSuFPyp2LvrdXOCeNGm8zs1wMCTGGld0Lp4uc0HOVjtwy2xvBfSVWshQE4CxmMBFpZesl2MlJ31n1dpSe6EDKDYZbeWQfV-TJhQSJEKxWhu04nARPgBAH-11PQMHm38CSoqkoWAmD3psSOfClCE3id3ubyWmnggPbMfv6mYOljd0U90KddvzJSYsVu6_QBUhqkYGTFeWmBRqJN1y8OO6LGuX4BDOL65WCVCCjxqWRU3nzMc9N3odu_E6u98h6TGivX2zZdkNQU97toMPiwA5_GCLmPLs1dySCW0vUnlEG8gAf100c5mTu3ELyvN31trVnU7MBzVI6YsOyXVTFlbQxVY8QSxyVxmJIALRZ8VVywickUEF3qoq8Ca06gUb1rZuwWLWPzhSM2LVlO-_i8UU2hXnImt--GjmzdnH1-EOm8nTf8tPKN4mU9_TypgyMxZjg4k5DktrLazzm8AXMyM6QhzfitypYP2YKGuokF1u8d2VSECeBaGlZSLd4kcE359B2GbvOTqvma-AhcwRfXZLEgYCDVCee5drx8TbgeX-9hSpXoshDk8eii9l4RYbydA3Ytiof6odvaVMUwnZmIJ8h0-BhLOUEYYus7_p1qV-8rzPcA5i4swRdcrhQ-G1FFZrHeihHVqhuGBoZ1a72aj_qo9xcFkke9xoytIsd9BYjTV6ydTG37vzZpBUURaGjLUfEdFfyIVs0tg9Jq1NMw3GzneVs6LEGogM5e1yHqBU59iuiGFGfzrG5VfhO0FyS24dmJgxDZ6Wgykqh9Q24_eoVZjPx1XUeaxwLPKM-b00FzYJQF49MFS0UNOajZ2moUeiUOzTqQVRn0UvZ7AC9AUhIEwc0B1ev713qgfvGbbRzkqFd8qcXyHD8tKNY026T4_zQm7Uvso7dnlTqegSKMyiI0mEtSXmw-3QVVbCJMrPNP6d6-WcUJWU7lBZKr0XbSZZ1leIman2kuhKOIKo9MjlPr5zksF5G8i1cvBur2kd0hhjIZKo6dBGwMM8DebDMqWLYnO7kvbpPzORxA8cicZ18s2r9WclRl3IfNZOmCEsPGfl2XhUwOX86-81sa1DvMTlL7fHlYQoK_QP5DOg-DqbwIUIeKNngsDCIDRxoB7JR0E_Kfw2sgZXXmVGqeHu9RLczYR5wVwemmpOn3Z-T7AkqkVadyO0nzJwdbKOb_4aM8G7RcxZSaxSUWs2ONXYbNFSE0el4oLzMJfJj9TxiBv7y_WPRxsFFxFbm7GCasCybFZT-z0CKfgTk1f96hatISZSINdbB5xm5p5jRmAvJ-SjzLg2m4a037VbEEgtKgSB9cX4OmiROwIsjmiHy4Mh3Dosl44tdkXHTVI_cCSdIS8Rk7NK1dxzrjgFNgAiDjhGBqv3jXvRWqx9farhnmomNzvIGjzqhG1s8ts_sIz7UjE6US5YsIy4K8iRPL5lAFUGbcis7xv5ov145u_oVKB7VoBXWc31H3PdVZyDUKcGsrw8ytav4VYvpkYgzFy3jXucGOPpGD4pKyzZwJOQ7xqiO9RJt3txWocGg3dlq0_zwEJY_VE9Jb-VYCJ6skOnB0eggnA_8NgoSnzlsj5xd8oH9Y693Wqokl-p9PauNYW-wOhT2GJQg4tcOqPEdVkBUZD8N8Eh1hCCUGVUHWgecoifIDXhhdrmzOcPkwHUfJycNe0Xq2UFZj9p-iy_yyLpqOfbldmiB1AOnZ3prpTACHpB8AfTpf69Psxsr3BgVeEZ6jdQoEJ634LSzGtKB66uhqdARO1LUmv7_c2PLsX-0DJGEy1ThJ3dCSwPm-ok1xIdOe-6sBA6mTnWKmZ5Eht4nmQ8XNYVWlp3MiJV3u5A-h5KIcWJLravh9sr6h9dvw7Kc8D788eTBNN_wr09Sr5zGkPv7zhj-QtVgJHN1bGEMCvT19mrCb6Cga9FISiOYhW5we4G7428vhqChlcPag_DFMipTd2Dr5XvVoHGUJvAhP6kRLHCJNcRvSpX3GWUHn4MYhLDKZA6d9UViOAEFFQpoLcHdsmEM9iP-GMOYbA98EPrUgbG0CWrVQW_3FnvaRkBY0EEr_5RSqX4S_J-BlJEjQoNE5gZ16vgUiku5a4YjCh9iHe4RhFKfmidYpBm5FRjiFioi1Ms3EmtiXxSjGz2EZKD6yBW5aRBBKSZ4pno0iBKWTEOpHVj05x6jjejIxk1eaY6aZ_eD5L6lMk7KsTOd6Iw7zT4VAx_1xMT8VlU5Bg2RdztWS3725g_qWtkhgJz-uHTpLLcD6_75ZmU73NNISE3FWiwgOJfLXV0z35sZb5WsR2kxLIo0u2ho-6Qs0HBhB3CJWTv1wgioaQTsnB9IP9zRzDXfYY6giOvuzf9EaPYQIwuklswmTiMcmxVNvOVu9TwyRFq3HlMSPr5pOTj-zTAdeSku0psMI5tLA70KhcUAjNiD5b1LG1f6CmYqhF1NaP5yyiiVPAr56LUeJDHTHetapp4eDbbifp3pNJjRW2zyhf03-Ue6PXKipQDU1lz4llUIspjJUbbQV0D3KK7oYj5cy7bwjFG58gcAYcbEBFLssR9YQDouNAe3cmBEKONIaS_IbE0i5jyneHExeUoRWhvTc0Tqyo7r-2SI_Pn2VCl10LCEw2DpItHDTIpZQuNFuZxeM6LxHiLRAxrdNzJGTOpDanJUscEoKD9HFKEfNp9ez3Ki_-L00lgmPlwL0jHQHqvZkHjVzyLmAd82nRwB66zEiyGlGIS_F2RDMZaKkQv_JYPRRBmLhKSGAO15SH2qqksd9InetodQa5L4MpKplyz8FzrzIW0JSbdHWLuEjbYbO3lg9kodMaYJhqC6i5ocf8cDCR3eI5pKRbf6HYHuXIN_2gn9xFEGiPd2d2iJ7PgeLEhC6v5l-k375oQ1kPaC0DhBSNV4XYCYeFa3UVGhjvx2ZzAkeswQQlvNdNXiKLoivGC4soFH1amkyfBGFlNFS8_jB1oCuOuywrqDDGShagverMU8WmsSh2Tt1nYqafhIAaznt5mZU7HGIfG9_IFEsTeMqj1gKoMV_rDwQ5dXGcmLJUJAWrDcobhMZy1H5VYJc_ZKekY5SdT7MsC478QaURNuHgDhIE750AMFOLr-0QIViz2VX3ZlnFlSJCwZ6TXwsAHHQrhKAuw9YKPqiY3pM3jYCwmjVfJw1FRlWCAojfZgQ3c6hgLXvWj3jmIPxEytWw0x5kKIv8A5dQ8l8ayU9JOmjpB1LNzdNmA61FDG4DDrUb5T9sBn5LM_WteE_KjhVhAM7cq2tcKD9KEIPQvEs1ToCzYYCY9xV1GJVV8OP1BgOZStzs3ESm-32bPdysgnUOb9fyRn-wz_MQ4K6kJAWqX57HfXnF-sg_XbpWxMWIbTJWv3MJvHIcfFrttZtEHJ5Ca21tXTe2-OyRHXrxaVuaZc6JsHXsSFBbocNvAtZxCvcO6Fsx9myMpUh0bWdjL1VuDGihf1A7375AjglunXGY3RsTJBFFXPImh2BllLeq9sAQyrM9agVI0_9NSbwoVpJvk0kLzfNRmTOQwYWr144a2zKFXEHfM38qbA8s0UXnpCv4mDuZs2I0WztM7x5KEeVCW4cJI3pF4BLIpbuBmjUzfZJqRH8X807u4M8OA-cxk24uPzB0CZUgl9GBNn633QP_k8glhiIu3qYV_7LIo-prV0Dfqp-7dzkw42PhhowKjZnkgK6FcFIoGBuLgS2RAvIcxTILfFIh7gBGELH0v4jc46LAWrBh894o6XfJZwNFOYeuS8egD_B18sDjrU8WSvoWbq2p0niWtsMTqOxd5PJDly4KHyXAFzdTj95bIj88-aRyHJsLetdTg-IJ7E-dNqNBpn-WAPzKb6H-a05SK0NyJgZv_2w0QmVL8DClPQsT5URtBHIRSYSN5jZWiJnAipdy6RszKWb19_l7WQxGGfOHiGD6T7Erug_XaBh57iA-QasM9GqPkiGaDfZSUAJvhkMAo4yr5fhklx4hpUVlBnl1x0O8CZbonSfNT3bnEiG3L-6TAyfiZNQj4BR8cYJ15_006qKfRu2KJg2c3QprlBrdGWDQrurnnhI2w2NToNAZIpZVKTqtDbggF5WbtsHtWqTJQbQbCQjfMr8dofLUyNiKztCurc9isKs9oHK4vpRTLJ1aFzQY8mMYS01TkTBoek30YPBdotDFk1oux0mB68rBQ82-0zdspKauAVrhNNwntEEkQs7lGPZvGaNA0SSTv_SwqDNSAQR-XznOQwvhNe5fQwa8vA-gcRl1MSLg_dpmF-DczVQVIBaK0lsKhYxRTsOOK6m11VYOqErIGbroeJDZ-hV1ioidVdgWOnZlQIMc71BGA0VBqwcVQiWnylaD8iAiiDNiJYhNFIzyw9knCUPqaV8t6Zk0N9HXTmBd-NFUHhQO2JC6dmKXxnDgJISrG6uudHvRAZ-IZduLoT2ChXqdgLkyQSWY4p0HXaDzuLNYO4D-8jBCXdB1NCzynDzgToX2_PWb-PL4lMR4mckUuPJRg3XAmEr4cAo1lLKzygSn08oUy2cxsBPcuLTw6RAu15-aKBc84bYGasjE3YCawa2DMmkWwRPSZJz-t5aZnhcpYjOcbQHw8ZnAfckZYzqKJvpQfkO_EYTUm_GG6vsEKGq_TWDFKCSXf-vIBjnJZumalUeFfIA8ILazvAesc-tObE1ihbB7zPLqucHQk9T9eBEwF0fANcankEcjteG4ARyafdyQo5XgEr1dJdKDeouPEDKBrrv7aWTd7omTM05pOPxcowFjIJ0focrjlF7jFOhWJtTLX-vlOl3GxS_JJfxZtkRKEoK0QGK_cXPOjLPf2Tcd1Pbrd4jRNJKoknVZJFvbyIGG4unGkjw6S1wMSE9Y0Cn37OjY2DdbQDicQkc5Ang3w1nUsquWY_6nzyO-GmSXHlGqWa1E3JXOi3yTF9p9PUe3yGD4S8yXRYHRsx6pu1-0ZfjY9HGVa-8rEb6NNg59sE4ZHwhcNDchJSSgsVJaEVm5ox7M2YrqBC9aC7g6YtRm0RQfQFa0YlRcBdlcMMKaEnxMUC1x8hhcxXAhkCcyKwd8jCr7aL7xrxoQfU9iv4uQU_db5-lVmhTwG",
+      "alias":"",
+      "shortAddress":"da2b6e9ea2ac1af4789c5edb13c028d181571af2c2ef07c7e6da758f6c83c841f4ba140079b1349653e98aa8042d138f",
+      "type":"MAIN"
+   },
+   {
+      "address":"xLupw_XpvIWv-5Fu3EMI64pV6G26QVXy3-nA-QvOnl8O5wSmxZew1by32efe_W8k9L7oCdXbYIhz1W_ZOPn3iCU_MllT3hoMd7bXFHuTl4fx1IX-STRUBxX3xn5o99Xzq4AvBtfNcyourzA1HXappKkLiEu0Deqk4PpOzPf5v4obAaT9uYJ3m95vjFt9Uthd0j-x9Tbau75Ie3eRsMZDXCONeEia_RsIr8gUzk5rXEYSqPEQDzaEbuagks1mnCnWiAjBuWIm-k2OGQhrlWaRmxQkz-T72Obual0MHH3_6IkeVu_gVtcc5s-vSewNJr8IkDFa79P9NaA1nXmTX5Jc94hxrZ8TmfBUtU6sWi2g4KJWkPqk7hFjKFD93kE6O_zieU6eAR9zl3hrFG9pAvpMNfpjqyeC-3UHNtyFICp_qHAI72tcwcakgYPPFGdPXGjGxvqCYaIN5NhrXr81B3oiK5JKryZF0LdnHHUCasm2euuw3y6qel2m84-pKxYgDHVmBNfoYbpJ542tVRifWYoz0YxWxIdKYv3Q5Gr5a8kCUsu714IVOg2DyekJryY2GbYbjM2YW89GO8AYuurVNTrWQOp6ma9BnfSO3B189Ji4qQUxHAs5BBsoU5fACNdXxFvDrmcs3I_vpUeIgxLHey6VrQSnuysd0pBstMMWcHXcyHnFxt_v9VBsUFB9LVF3W-_ql1kwLRhyECdW7-9VDo0Vx27PMdfKGC-a21IXURQh0jGWt27ojKj_B7b7i_dRvhKLFKZaPql2neuLB0VKqAmzCIibnJ0xPzuWl6JU4LTJLHUAYKSPE9eYXIQukwBgKpBb07dqPoM2jGUMmcuZksa7g2KKSw6FoZjUFpUN7pnyls0nRwqNMnvYtVYitMC0LsZL1pNq6UFyRZEV586rcNxTjQHuRt5taSoaWHVwruTtjtnIhQKPqhOV-EQlt3NhBHsqwAqtwEO8AcMMDgtO5LHiAS0NEj3jir8EhmfgwUpwy7fFu1GsCZf5cXwO1Psr7ybPE422FuOmK6oYv6WEhNZAmD3FkYEpJzsYBcrb7K0q8uuUZJ0yIk0SOq1VwaZNkzNm_rwutDsTv8HJWaftck4RRbL0vzP99pLkLmEyFiU8Y2llsEyvefqiRen81dw9AgnFAFYWXeqlZxMEUYQNUsN--Z6pD9T0zJEnOD9Ld6ClK8jRbUjADpYEJpa0pStO6BNJQ3Dfq8F0oO4ZriQbNDK1AWpjnDgo-W26tI1w8_1X15AHAEjZvFd3ps-4JS0ckpKiVfv6dlkSMg9LxrICH9QWYfXRd7qWAgo7vrU_jcdLZNdPcdLFOQ5179iao_DWZUtzFE_GKJoINUdCRnAkNeP-VDVRoBNkI4nBcaVYvBvLqlS1FtaAJAXVlwy3nyzdAAZQvzYoTlEgH88FrT6daXN5niNTpApUIj9XutvW4mYvc1tLYK9VKptae7rFbGPXTmqBzev_CYCH7gTB1jIdTpMJWVEXCmQ8e7xJiZfPHC5nKGpgMk0eSYb-IskFtqGbVgdDqpWYIiDNITv0E32JjKiIfQUamstbU_Vb_jjSgcTiljX0K6YJzjvN_nrVeVWeIqxUSuKHiQ87zEztdd9-_OW2ck_F7SVUYDR3s26hILbf7_xjU19lZ2tWN0HoxXT5PkjdTwiIgvzrOYqLjl5Oi0gXIhI949tbZlaNsXqhRGIsfY2zGUGqvc8vyuNWgfoXWe79mawCRC8RP4gDJY1ugq927LKal-i0ZsNIddsbF5F5Jx8bzECv91L-KBRn1vUWjOvAOPjWv1m8LqgQLj9ZCYSikZJfRTL6-rDmEwoPFXvx6TkVyg3hBjTWNYgV_p_C4XuG_fxrtICvyeK0wTZccc-sJj2cIoDRdiFgxqTy_RQXCgmRZpoNRXBm5yVk0DklOqDotRdIfdzvU3i6cFpMdJDwZglEtnCvjzOoMHjpWuY8sZY8x-l8DOs0L0qDz8zXyaFCXg64s73EzdiiRoQkAn2rOlO-9tFnugZhMq3mkHrzvFaJPWDxJrQfHw8QwuwZXjZOFYbCxmToONIQeYooBowGBAKMzPBjCmFrAy0jzlIDejQ6mCu4fSZoFD_zhtqsLY0_X5OVBE9W8ZUuGoxkbni4wXRD8S6gLUIll4NWQ_mGyxjd0118mXkJyl7ETubNO80SlEQz_8kDPi3LkuF64KcalUl1QZkLhSh9ah7Vx7DRJmO0kFaRFixDdL__ZXm9iR2FDKL3xd2HASPB-Jn5KupXiJtfbyFKrC-jdHQQ5b2iwrwu0hbbexN-QyMbxTo76mvJw9kOr9SF9yk6Dccbka8UyV_rZen-c_IFt4_E9hM_s_xiyaURMPtR_pLwcofZ-sqEhUt32Ra95vS7zYe4rRctisBqtVe5t8AsL-n_mxQwCOo2TVa20p2GDMEhTMcGsFuwUU18DcMJCxp8GcLWpFSh9RHiEe2h04GAC9os9MV_LIFPItU3wfyW-JRXzLwX8lcmn0uF1N4Elkda-nnE181FqzZUwXDP3G_jcz0TDmx9arPuQ5aHAOR5fndj9FvdzM9ySJILznEpw0xZm2VkwZNT5nYxII5FjbJcIquai6SFD4AcN8HE4gWi7__gL3Wj7KinmWfZIlm8rvDq2soUjWaOaF6x_TkMkfHGz63uiqXcqIykzPQfu-KmMFkdeyXY_4fHE6EdqIjDgwnf9sqL95CPwreGQkWLpcHcFKGfB9Lb9IjVN_rB-_MuIrNEbKPzgBFUjgeX2P8aFioMVHt8UIofcmU1K4_J8oS7-qD-cunYlwN9tibw17sJGWeXqYcON--3wMNTBgxMe0MoUxS8yaMsvYKfnmD9qaYrT9CFlrm_w6I-1NwMYSX7LezqlQaaFXbkdFoqWQxMkE3-8bH9AGidcO_F8Getl9c_a8JU2fvdPiKQJxVIa_MUZn65u-ZNibTVH3Y2QP-C7SSDnaD96G-6h-VGaZbL6BgsWy4W_odMso96joKlpDmKSdAjrRrm-QPgJWCFueZH8SKUMXNoK3soQ1yXZkdBGHcEMpCkJzxzdxSV2Jvrs3qZUcEoAf9lp3ulIPacGpzIugTQ_M6UGpNqo7k7XxbDlge3g_5Y29_NnYT-4vpdO8w8MmWEtXZGcN21gff_0lzrq1Ss9AIrWV41deCROUL8e9ITB7l2dSNINub-Rid34BRzaG6SnIq3tEeqTOO77YeMbxlHtPwj0k1Yvr21BzjH4DxaAzUG3RvJCRjqB-V7aDqWm566Mh60nDrofilyez4nVXplLEhq8yoa9qW7aP06sWw5hjbMaYKnnimHvn5r6Kz0mgQdu71caPsxLiecBtM6kHc0_1nbc0CuQsShpknfHZdFV-7L9Vsl4QQvR_4S6BIOdGEHCHrxtmSZzfzUvqj8oDECzUirkAOp6bafyvy2wesUkKacGo2fgKNcbX6E0dF9F5q48vhSFxeRWrLGYqk2SFu3pm71-BqoVa4Ual2oiDqjwlW6_575EnAFV7rbPlsFFSniFsdalr6FGa5l1CN4doVUbxeaTXoQa6HsNfyX1iza03NAcqXDk_etzjlXE8a5x5uMkiyzfNgw1qj_q7pKaNdkODGnc5pd9U7LCRADobEjZlQgTQymDcY-UpuDXrH_sVdSnqqPCEllTjicplAgj3_DgM2vSumOI2BmT0DUByn6TZy2kWC0amMekgsjDNyry7c4jIOklcV56Lh1fLbSPN5uDGaD7h1Ymwb_3h3c4oIHC5orpKAii3XW6phl1zLDWefGP6KkWUQrF0SUtZ32k275kCPiGsMsqXa46ZmlN740Sq2tURHdvEmLdVhbvuVc_Zo9NtggBIn0v48Yvk6WV0RfPAk56VLPOLg_dWH6EAIu8ibYQPXTbGCyG-wv0gToUsAmoUCveo0BT8pWR_eMDHivB-Bb2rc44VNNR8-KPrElT78x-Fxr281CZENczSg99ytmfkmzuKt3UlpMB1D3E_7rD45bq5OZ-2wuBRynrxN9qVlniTl9Ii_Ajc6otty5Sd8aYhYR5XtaIOGJVSdqnYU5YJ8GiaysqBVpN_Fe_Qe3QAFRTA5lw5isCNOSpLjCzmmEUguHtbBnUoUQbDqX-0GR0sUGFTanaNTVziYwQyAhaF10MWsKKyQIk_VoUaLYBcGFn47DB2NGX3VF27lJ5giXWzVUhueiY-TIWALZXbYnFqDLqzwlR6KTdAoPQBlHxXHiJJIS4N_F1K84crlAQTKn0ZYlpCOR93ks2QtLKPi2GYivzPT9HtyKN0p1JUCm0PabXgSvNbLMAAjb9IZ6yqMHJbgx9KC3UFAQ7Ha3onYvBzycAsiUgggqBGktk485Qr7PxWk1-RsFEazH6XYRCizLfdZ94SBX1IoL8uyOcHGrIeWnKZsEIgzTEWwyfhvwobZ7-7kMQGbSsZZHmBEnMN5Z07GTnBkFGKOo-sYe5mgI8pb0mIX1cebbysAOzrE3YJbYKzrmMELsmk_XIz33HQGtYGSldUDTtGcZyoR6RjsZLRR68ikjcchCcHhL1t3sP_kg1wnlNKOHSRL_VCeOTaXXnEQaf3wvbEAMLb2I9z71BBcsFIc_UrOgf7jenfOF-QMJYtLCCq0t4l0csE-ZJ4_o9xEvH2TVGiZoXedKN1cQSeGeBZvMpYD-VzoeG6T3BVGvvrjp-M-OifAspTH3znoCqR-1CaynJl6RmiLw2v_yIxwW9QvlQHAK4cxOqo3gnSO4WGSK8ABNV1z0jiz4PpwSyNclEjRkuY8GfFaJmjawVpHX4pgF0xqg_CbxxxhiKX3Mp0dFp3PW6hWc8q8So6h2P5a-6VoypsoZhXrN0XO9wIzozK-PUE3WeIcv_C4OqUpqsTv9tsgG5uKYNdjCj4bIQTF7Y5SG4aOpPEyGVTguMSqR0kuWZWpHX1ziFbtvdtbQFgcjVt1F3PKQKztQ1tuv15DPnq9kiv03a3GbLAfq_yaKWnkSzQtHWi5oZUjIrFu2S18UNuog-2dCwWJK786U0m-FOGDJJKCKNq6bIMOhgmCXY357fEFZHecQR2JPgOY9PkQpFH4yzg40Be8HOWwNEUx_0Zp2kV-PSjLDc746f94smgyei_tVNuivyXh6vFqYM6ZzjFh1jO1XaoAJcaqPLYMrTbBkiiNbABVZz6FpBJ3o64A6KqfB9yLHpz31XLg0T4W0bBqbdHHCFwr84EPx1l5_BYUwHnysNgrDm8FAW4fOXjVI005Ez6E-HK12ym7Q1UUjM_IXKOK00K2UjVUHfRCOSggu80LC0aR7fV2xq4E28mKFs3a8nr-VTwRvJvp1pZ2YliyK3pwE-M0bYyWigs6aIxZtBFNZfdIbS0Ygiim49i6Ez0gJAteKaLCArNDsC-FWI5I5V7PXLjjLjOUW7C9I0_m8OfuAh_RIXDBSQZtS0_hdw4J7Y2vfVFflVbQz_BuqurL--yVUoPhKL8K74a4Mk7HmJoIysDvKQNfdd1EuJlTeKg01-8Aw1wZC66Xi8yuw7ScjCK9Sl2usJMcAuQrA1RpAzgeNXw4RiA3y5_w04ZXPg04-Vt40rsbrdCwFYN0d53W2t9VBfHZPDAX7oulFRaAUQZl14p9mK8kMbsVPo3zrSE7uwa1v-bEZ7KYvX-lCS8reAAMkYhcSQy8zE6A_Hs-fSVu8bMyn-TSV5LJqTKXAQvhatNhmd0syl1xHdHLd_JUQnDF0qlGY3e5KPUa1Ni_dX5LqZhf83KgRe-tS-6igvUC2Ho7-77IemdH2N9zNmr1XpCj0wC_wdbxG9doeGIXql-ERM__TNneF1reTmAyGtLa9kqOyl8SjsqAxMWgRlWCc5998JXFcYjpc51Gnwv_hpN9ebHX7OyV4k_wDNJWn8h4y_nHNJMFX0s4pHNNun7CEP6hWoneEl01pTLuklSHdNmhuMLMmkCei7sjzfvkNockxfQ32k_1hsofh3b6_8EGXk0wPYC-ZWcazIdLGDJl_CFuSH5Ba-SqtQdigs7qfahts1al7zZ0vsYIRAiNWyR_78lw6A3VtvgthNBYF-mCnRZD5Zox_VlhBeNdtQufNtH1hdQCxGtjN9T6SSnFC3XJf-v71yPtlTWfXflfVERvcbOiy9EDSfn1H-TNs6lYFRDXtFcsglXWXnpfNR_BcaDnokkpTkT-Jk_ayCovZRY3cVP3L_gpZYGaJ0_sFAbZDktAUFLijXdDG7rLLu6ko7hw-JWEq40eLxWRO7VecC_nOMrsOaglOsDNWxyWpNQsVSgQdkukGyv_-8NB2Mpsh214XOFgozylqGkdt2CZbleJoEUCjWXUjDXXzHZRofiRrY0cxlyD93SsddB36VM1hR6SmlnzODLNyYNTzKcoACareb29mqvu--M7PaJSY12vaz8F8CUXznJ-6VVe9wJElwPj7Lzi7HW9iztqhbnB4sWr20ih55-muCOArbCLb6KFrEWR857rGzn1seDDBc1fLMUmGIiFtZXntK-aJ5JKNvuPVEl4PauHK27usjjODGq_toBQWpZM6ztAdRhdAYIv3YeXABRLJMTS9_WZuNzWOvI68Z6bO2Aihm0iunpPFYZaG8nAKu7LRnmWscEy23sYTgqGktZPIV0Qm3miA9iraOoQuBnZimTS1kb7n7NdGJHkuFokxHrnm7teJiLIP1cQRK535Rd1FwS5VxOnDxmHY_hto50wFLoKRmmPYq4CybVUEhdCBEOEVJffhigKzb5CyVFIXbtbLctXA9Ceh2L4HjfJZtc2V_U0azHxQH3FxEnTUlUjwz3iGpo0PDSD6WAZWq1S4JxLXCobbN_GRCOUmQizhiicSqoxcmyNyo24w5i0PjBd9rk_DL-yQOlz4uusq6D6ilXtocdYXOtugF5CZXmhxUPJozk-IMXOtMIxFFyWrn95wsFtthEoIvGjL8bEQMfIPyheO0l33l_qbCkRDCyEI3DhpK3ifvXwo2aQitbXUhuUkwYyyop7RqlZ1uogm-7a_3TqQBxwk5fA6RvYQvOADPbnVOyx4Lj0TREyX8DOGr8opTkTGO7rfK0dEjnE2tcbaJGzkkakMNgXGBJflGM5PFQuXxLS5NOHy9Tlnx7jgiH2ukRom78s4rmN2tfkP32Y9DKucpJsSU1x89d5NMnVKBICmKpQp4RERVaoY0TSBMsbZuPUnI2n3ggUFeDXG4-evdU8ktN7SdPkARZqBbw3Z2q3CZIw6V-4QvqacaeLbBaywHrK_8Kx2XN8AAPLYeRENfLycZoHwJZCh1zMkwtWGerbfBtQa682DuXnX0t1iTSC5-_xUgoPHz6nfh5RKFOUSoQIlh8XhhL1WhUVLoeTZPwCIBY1fSSaa2PMeLG_6GO7Oa1thSdF3B-5wTKKNENgw3Ri7mAW7VPm80T-KMfXJhtNyw9ObLzB6U2GuW5U5qit8c41smw7r7ksqYgg0AItIDCcz9kim3O2FwktfDWrCi5ftPHfJG_Wsov5WDTuufvZiWXKbtnK8nGhv8Yj1U8DwKQa0oAI4Tt6Sv67AMDkDeMfVzacITEIO-1_oUdeAyUEdAhBsGzMP62ArapUQ-SoAiL0b7vrmLstE9DKZ6SqPLXWvdAM-y-chNJxJdLgBTfdCn1Te8NuI3DYA7tMCY2WRyICe20CvllakZzpb9mQEnRxAxv9nII9qjtiLF5BI86MsDhZPeeyEyPOxALKVHu4piEk4ITmd0fxHf9kr5WDVjShNvt4XmxrEVrpL7rm6zqNHZjMpP4MJzDWdrOLRHVpbw9u6_tg04fiTC9iKvJZFtIwZfMCidcO_8uBLinaPUrB5waQAq-Vg3-GfIX3MsDRLsT8ehWtBDhN-J44giSMUN9Nz_XSXYUbMY92xQnBaHi2cG4WRWdblD3nDbuhFUzgziz88thFrvRXcef13CYGzhhmX7RBbARtz91e-1JYqqz7Kr02uBJZ7uD8kFn9tytWQd7tJ5wiLOWpM0Dgo-1gv-SKem07oH608mmhQljxw6dqMwKiCNA4QxqFaMg00kOuIjygGGOKi6I85PvoPhaiYlUx084MyEwyYZrUSo3LQd5p-edwrJRwo7IjfcKhEPr6crvJE1kaIHa-n203ZOhMivyRgzcms8ou5mv5Rk4iAs3mwMzSOMlgAGXqNwQacNOA4Bqm3FNrAJzNrBig6-QDEFYPFjBUZSAuBRwvWkYqMHHGAwKlgGn2ockFaivMN3ZNAiMLcMR4KMLUGlulgyIsmPe6tpB7JjNRa_SLvjkB0xqQ10pGqjXK0-PYKA4p6xFmurr0Q_K_VG5oz0AOKZylTj-4xW_61SYLX3V9MIYz8YKrgvT7ibOVNoyGoN3gx2HB8d-Sh94CBw5edgfjwLdc5eyNs1Us4v847MMAXhk_MCbSV-4OdExIZ1iVYLlwRhatDYGMl-cx9v23yP3T8NaqMnSXR9yO2Hrb91fJsppAOVc8bu5X7fVtFQCu4ngqLPzXXg9bqBWbWU6OiDbEzks0wZYgZy24NSebvEiE0s7O9pxXKo6vBH3wuIkHs2BVhs03cWXt_zKNRYp40aVabvK__3SgG4xOQo5U3zocx7nskxLH55A24zqx8B3kxOauyfMb00LZ4oFhSxBlbK7ggDV5-L9GC57UoOhH30tywmiK8YIItIb3sOtZyvoJaQapXGAmdHwfJqklJVHpGT6nIopmCWgWo3sKVaAQi8G-Ow0vRcpAOQRSqC24G-zJWF1Fy_DBjM5DV5rDhhiwIxJRMDOg4JX0HZ_rdmXTK2Anem36sbbOb--6pn7WpfIhhjL0xJpeKaoeKvfqadgLVYIc_YVVkTs4IPCjoh-yWFc0AP43cZe0dytcVn1H7t5MyhkoSiugBks_8yHsMZQWyzXp2cvJkkYrrBKkpgn231Iz8kjutwxSKHha-ca1atGzII3qVZdhDc8juIF5Tlc48wqusukNuyKpX7qYpnRrrSyhvVx0GQBzDlPRTYUvuUqJQb0nEC8wo4E7pDzQdl77D6qTShhMJicUkGUmQZqqHHThsdgMzvEnLqygD3Hmv6QajbCm78XDxMIuuhHa8JjJog4zVd-Y-bi8lM2aAmQN_yfSVfJaR2SGnkzTWknNggtgSvLnxvVzAE0rXFUHQuFLy45cjYtmOc8qKl3hPn_yjXX-rsYR3Z4oMyx2cEq1Bbi7Fw35DcvjUjrK7wypZxDA3aVdDb9-Cfo7gVHPl_Tbh-Gwy9doNisuuyQXgQNEuaE17KLW8sYgIg8Iymx3NclnxviUti782AfRcSBJ9azRV3J5AsFImoEzd23t6L2s-4AHCoJ6a4qR4MfgHZSi6Wm5c4CGWSusR3ZUvYjR9otRPB7UUiXKYFbIgF3zloQg98vf0IM4BeJ64fdzpe6jGvf7Du05TZOIbVxcl7jAdHxN2RGQeQ-IP-ZuygTvv-veX62MTHBnEv-rLDk1wYbtnBDUTcet17wtTCFnfYFTV-7E6TuVtbfw2FBrPfaly9lea-9ca5vgNUHeIZ_616rX-q-K4-_UdGS0mY_KmjY07A_loshDPTpFvYGldw7wfboT82Yrqh5NWnHCGlEgcIuv0dHgCuj96NgzaDjpQFvfLVCUB9NCFdmt9TKIF_cfP69EKuuDF6cxyFOoJ4fseHyRsWUTrnsIGFZwYjVzw50e_ikVUVWhDTUfjjeIFfDVshO5iLb2mhWHrwXP-vIb5cxbymQW2WtrbNi6x5RFfKlIua6DLeoJmAw_SnzbIUbFN2A39E-Ecp8IdJ2boFz7eYdD3T9nZ8ia_t80rLLALddgF0zOEvpCci-bKlBJP2KnU2FAZdIJhrScmyV43Qbg9ZbzSn6pQrTcRY2UysmuBrWdaRdY86leKkyL7aDm7lwkcCm7gB21cyvKpo3kUUQIPII2OqWg-SK9nJY4r0WvSzAcOwwfmlMnELXXpYydP4DSqbh834K7lW2bqZDElmmpaH4sbsFGmjnPm24ZNfVtO3EjP78uHtReLuK6rA1yLyGHU4lXLLa1ertWn0MWob5iY45ZoR6nkZSxI1ZI0G2kjO7L2ls9mO9KBzC6LtKiGF8OWexjZyMiBJ8Hps8EbFOIRPjQ9dY0e_Q-CIu7WjhIxRDnKKnSx_tVAAvSI1fc8_S_hjKnym4LQAOF-ud26a3acNudUsL_Fig6mYQy7UF4MOM63EE4RbKOxnQL-CX0eyDByRyPLZlpzmTfG5ebcTu544GsOuBUDh8NX79RedVDoMahiUFblFgK0TwEePzg3sxjxq34NwlJbKwk4N98nsGEksVgP56hEUsGHcW3_ld8e_qNvuqOc1A7ALDE5mSNiOdcAD1QelS_bji-Nb5XWYHUkSaq6SPJxZjxWXxbSV2OaBtOs_t3EKVVnTm1AqYdOeDjf3923KX6ZcIuCycDnhNz6jBR6F93keHmiNtvOhiaUZvvtFObppAABhimld6BxRs6eRBAskJsbFdZ6Ya7lTE_BQ2UtB538zFIjC615HZ3jxcCqwZF1tEKa652uJ3JUosJOJ0w8nGXK7MMQvmt75MxjanhEAx_Tmxy2TL8fH5vi7zSScrMxlpfQCle8mhEGrmpTRYyfLs4caFS2LT391BEfudK6nlxc_sURd9gzyzd1eCRJX_X_ehFZrQhIo8IpAgbaw_8rFx6EAEQbcl4wxcwFtrzmtugs8aNmz0OCDV2ZcjoFaPmeI5sItSBvld0iLVO8pnZvxclnp90nhb4cIoImYrhS-XBMSDDSrt54dppSTdlT_9PZ0L2XUBQbboljaQzK1VCcikmTlpDnEUnPFGZNxsf205vBNDqAeApV6D7XvSuZvm62bKyigKyjYJ8QC1upzJlHJ5_6baVaASzgCzCtbIUqHL6zvvDsJgC6rUaGlPxKHeyIdmkZNbNXnbRqthz1Iv0JMcNBBvSq7phK1ef10dJCSyoBn3UVZevT7kTVc5LjGQDfGl6a6NVV1VO3q24jc7tBCwhTI-7OUlHS_YpRpwRQW3tSRaVlIB3cwUxgKh5nTyRSMjzRJv7WXnvByPjJErjdACdH5McnsUS2_SD-Cht4rxOskotn4dCFvGXuVa9Bf2jhWbdeon6tX7Us43Qd9icc5QyZ_whrMVL_IrMyrYdlzaDyCbrcIWckT2cOTIOGo_QbHlSS7uLAhIQUBepJO1C_Hid7zSJNTCzZKPcwgMe_y_bew0C_QgcbVAEPN32PtrrCXALIgRshm4uZlxiMsFsH3PbeGNTaLtiaSCUKofI_WDc2M0lN6PK8zNNCp9DbbhZgtEBKQV6KEzdNb6uxUMMymSzmFIUCvdQaMlxm7j2Hp-7JSkU8iBPXlnhcU4nxNgbRury-1HlRBf11GzEUnJGoiep5q_4SUoETClQRXNWU72fXJJBBLLNwN-kNR1e10bKXTfnKZAIN3JxqsjK8pdikT1uv7U85I3ERhorXn13BCTBCc-ViFwltLiPbOhmpTwkXBa055D5wEv6y-BIxNxyKlfPTVzcL-Gep9TQRtnfWy7ZBruGMuZUXNOQEXMcwJ-Boewqx9Cwrmo68cjDovZnLNpbaEa-Ff2OnasvQ4bVblvr1YZdMaQtiSq3-aKu2qp7N1uMBRnhNS5JS5TL35iqqO_MWsZmwjPiiSsRkVlJfKLzlA8QpgWsYC0tzX9O1LzB6Zy6HM-UkdxeLju0Mrt7w96qcvUMsxyQIPkH46-Dm4gHQIftKlHwEtX0UOb9tGZaomiZOzd8BQh4BYsDMurmQCKsY3MTT2pjqHgVIlGsdZ-cTQbRSikoKJKGp5xhrq8oJ0mNe9gkmUmT_DeD37bSB5QecSHeF-qNZa7IQwWrkJ4tJtgSjbpHAQTMIfACrzZBT1BHkStxTpOzrAlGyPbnCjS4oKbX7zbyHmZgFzYgqr1v3iBnMqJ_BMgga-oVU-SMiJk7Qe4sEqcvXH4qdyJnycCDkhdKsJDgoA0G9TqFbiSboskViATvyQXS4xojFfe-zxQamr5NRj30lNrcW7v-L55FMlmolAWM3pdUvGA9tWlMPsqIDYtO1Hqn5B3XhdZFKLptZhzGxuJvlcaaiijIeXumNyBEB_HiyE890SblwAxGVYBuRfgKGWhB3NiBmvAvkl-UVB7oCwfkgKCgWglWbDtU4LMYubZ77PiIQfzeTRHb4hPQGQU1ilGLB3KOp5w6hdj1qMds186jkLzOYA_jha_gi9pty-zTA6d62dxy0P-o07F81TIio6B42RaA_ETG4eTWb47KUaVtXY5kH-BPXPMwHnw5QE9dkcN1RewO8FERocxYlHrOvb0TjASQ4PkW4ZU4AKBAaMVhbvhbFqPdGW5uh77grC8Idyb6m_XRi9DW4MybPlDMDdDumiCsLxwerrK-DQLMqNK0Ay1PdXfakAuaGZvtwO_UrzQBRAksn8zMfKeVOzZHuT9rswZkwwX1Ciu0_CN2d7CBFhvQoPSAUik3GrYXBSXp5iznLT0X4aqAXyx51Wh0Yp2WXK6KPoITOQl3wnQ1vGlWIfb_asl7hV1RXSjo8KjTZR_KhFru8vBOqd0qQ2_UK2epiMT8hcOgDXKYHMphyY7SbB424jBbmphBXwCBc7QRIIZDaaooy-WoEbnQiFudDC8h5tHKgjsr1uDUTC4rXQo7lFRZ8-AaN0bPwnAWozz71pdDgfV8sHqqM-0HjSPjIHGxsLyD7wfYuyzMQg-usWPujFmZNxB1xmvhz959NCjVY1uLVlixP_KineIjWO-bMWZUR7qihMJQZ8p2Jf7YFHLwMIjFWaaRmgsXgs3ZLwd5mVzw3Vt7welE707mwklJDnRczDXfH4RfDJLzc0QJiR2yuMSoDwj_LyaDL35iEOcyjrnDjj6v4AF-Mbng9Eva3O1ogqRAQLEEiPcJEMSJFQ3hgKkBDk-q0nQyzTV2RkIWh3vQ6ZM3TI8lSd5cPLk9DxUkV8Qj0btWYa-6yswjjoGauJa9BXg2iBoqVVTOBb6k-L0jvv2E_dQ7Gy9pcS5iYAL7VNfVFNsDCmeYcdAkOg3j3FuDwYAqwBRa3OnaVwuOTtDa32QkAOIebmp3PY99g2c40avS2g6Um2zm4ABs5gOy4VMIwwVb3qjgFHNLVcQBfF0eg60VtIzY4FgkVV3QU142dOXdMqXl1CvRKPhCgie1pR-tSxhZvCvKIYuV9Z00Op-1NpVcdLtssKbznolVnhFUJAJIr-JH16Lt-ffrdP9F7gcKHrFDxmBgjx0hLoyb-t8bB5ID6pknW1ziVj0jb5H5kpxXjmEnKLG0FuTQOlXKdqN-BnolfgRFF3FlTLuYLM4zWRhtJou7Xyg_k7pwrrazHoB7vCwgzznqOojBtx3tkAoIw8QwFqCFlnMuPEoYmch6hn3U5kvl5HlF71Mg5gBDfP9LBxQXEPMxqXr7rEDrx9-CaDEnB9QD9wkEnWVPeJroCqrW2OBbpIrTXgt9S8Vry_RNKGI2PxvvclrIXzq2Fl1TrII_ZMCFour7w5VD9HAld2bNq4rDMgwNeHhHSDucx4f3_M5pjFrGJIOeuz_ePLjwFd-pUbOcbVrJkrY-_lZFTqEeJxhsj6xMWaLAWNJc72hD0ZagzYIm_X7lFZ_LZpfddukvYLPsks-RKN_S4xZPOIfY8wOWw1RlM27Nuk94q9VbRTLBMlxY3YjvVgGUCdykkDxTVZYq1BCTKTBlVcEsPIYhpZGb52j2GCw2qSg0c6oYzfZ3s6Qy9tJTZaUCCm7UchR6upJIL1KU57jdIaf7_xkUKonF2Ri5vZtpols2Qpgw150tsaCrTkAv8nFVjHIlczeuxuXZHzhgs10zrcFJ1Cn34vzz4Gb62gdRPOliW1xEuqW2pfHITuTp3gWOdEx6qpUiLbJoySpHoVOakoYEGKoi08drrJujOkH51FtlhF8sLJ5tLLrx_ePzSbwvjcFPHtrKcLh-kIhEZeaRrwwI0a4gikp9UyxiwgiTdtvOHx4Wk30PMk07hUloHFVqXtFRrriHieQrd2lsBtzcQV4NupS21dtaZr8Ae5AnPioYfLK6BKyshYgEhPZ6-2OeQaDQsSaUVDPdi_iGW-ekV6ZXhuevTAmmKU0DawwKa4M3VF88fOBzZ6Mv2V4KBMmeYT8EAUIV8OXerLX6nl-QmVn2rcUZjyaapHOu4bHo-2jwirjWvzU0ml-ARdbDqlHxPil2uPQTzh2AqKMNvaAu3KfSasr7iF71TlEIaI8EvfZ7w4hi-nHrZ8hALE-LIM2COIQg3apCSnP9mX5viEE-l5HaadoMDeaWQInpZccNioRzByyDUQBNk9UGopSknODwGwsjQF4r3sPa8_YmlITEROgB-IUYOXfCZGz4Lsv8If-LAYnyQq6tuzxI6uVn6Ae_EoGZUFGQphvH1hOCoZEnbOlDXrMaQdpYMaBNGul3oiGiOOgMwvrV0zb9zO3nxZwfwYskcf4Euy64qG68iztUzTaIpHC606u21rBS5OJADoIdH11ImbdYGZA-fGeK_5FiQZq5pwLbqq5K0rZ5ce_kqNvBNzzNE5jmyl_bEzG0lylXGhblNfDt8Jw2U-KsfEi_s0C6tgc8VCoO4QJP6ht5fqn6KokYoP6kUmsnzQ0dNz47M4va-IDiSq5Zt_cJyRfhiyPxKSrrbuG_PqRH0C7E-4CcTDvlYOZAIKkTQDP7leGcQr_6UF6SxWbnhj71sf7maplXicD4a0MKwll6mXcCDKBUwsYQyKyd-k_5KUBjHxsLWCfBkEnLZEN8Y39geFbnEShY41Y_jh4RXw5L9AwphEcCAONSdzDpVWqSo7nLjlRJkOqJwO_AkXMMsF01pXSB1t8oPz20gbNLIJ_-NCkHlDw33sdPRmm8lqmJUem1UTEhujcif5Guh-KBUgmPm1oE8Wb-R00h1R-D6yTPF5Yjk67lRdgJgLP7TlNUEYH7wNKmtIDJbcj3rfpy9guXQdqdOuEP08TGGMOVEzQqsmVfCpP5vQG71-Ajs111JR0Xj9SEJYSRQX3H6gMBjm4rkrxaM6qhEhBLQAsXZzbI-4VI7-4XDTP_dBHms9SwBkRWK0UWXGgbSJ7-tygdgnZsVJZ84gL0uolvyYqoGLXCrNOdVBFLP7fJr2oQIzpsipj1fuwqYtiDuku4CndKB5fFwJi3tUKRtai1GtimXzF-Ks9UgN-jB7L6zVIT1T7uc2Tqovsk94jI_Q2gT65rIT71JKsFisGnvEGJHgO3En9y05cfq4vVwlmDpVPgK81aqN3ezN2_SyfFHAkscc-H3IsMIRFnJ-00tolJCk7nSD1kigYtfPUwIsNso-Kl5CocZFbEgwFy5YGNNMNbFUP2hiDHzqHPqdKpw0sGyD8okyjQYxi0s_YpkghIB5wvHynq2G-KSlXPprrXNOhP_F5t6LSEHiGrNsjBoEW0yYmssX1j6iuBGFAJumwPBPDFswRCpRKsp-p8cHE_JcpsIXve9VaksKlThvxiIbeu5XIXZq8qUy3mN7YjNPDkWWnEgiv738bTAa1jOCgP5PrkHX2SooZ5ls9u31wNs48FnpSoFRvlcVfzRiCuroi7Ru4YKm7NOuT275UzA6yfNoh4L6iWKtzGEKdQYJJU3RWnWFjmUsZ_RmM-9CkevOgLQ8SINttYsqT4aDG2ODqRWNxIzz5LHvOponnqa5DtvHteRVSRLyipB_DtIjIXQHLosCFZrc5aAr68Rx2xv1ljFj5QgPiNt_2l8XNuE2LcGyC6VZ22FZ2RJXCyH9gmhSZnj6mjV6U5ueTEDzkkmYh6egSld68EZLBXJMnAbGEgaaC77yQvdNx4K6mVi3DiCfvCodgu9FBvy1NyEJlGa7G88XDpCBuUWLZkUq6b93EZPZm36fOPBf2NqFMigHrBsROep8BRZieKJWQYKzH1TFvh3oQop3HpPu-9FeOMeoDM1QFfonooCmkxqB1CvpucMkJxUOmBB-t8M4bBeUacj7xpXnm4sWgoTkXqiqxiiczCLd69OFWZh0893FirczjMeozCX4rwB9eGVgm3gucM2OU4CbuDgjNWGP-2bA4kF0dYxz9Vz-_7eyrETN6wf09hjJlsoRznwD9GLT6srN16aTuigV66xxdMRCfjX_JAjCGAI7Hfv4lofEm95qoWxfJNknouQ2qAEbdmszcO9O72E2M6P62pdMnfGOhLitClEAHTv02PKsI-GIwoAV9LtDifgYXu6kZTXvgMkx9tdjFFewtnMZtvmPn4MFPxwemkWxSsiMd72ydV5D53wP9nOwGLkObe82slX2IucgxdOw3pL4Xqc_LXut_YyJyKRtJ_C56NjaZBBm440terFG7e6wF0bl4MAuFdzMCQn7DjL67I0H3tHyb1_2ZLX59-_OId3-jXxZHcpNHsL7-trhGlTdaj4Q6MtVL2yaLFHqKvuP_eeTYpQhNdT2S8Odyvnu7UC6M2tZmOWs1s990Ks-nIa2bA3G7L3UlO_HlsNSwceCq0XSHIRoWfdBnGyoSer7hCo8VY1Z426B8ZBEAIPFbob7yBbzFhHBIBC0h_v0uhLLJcVnkP7Ban_UyE4bnK6ekGSsG8Tl808ECvtiv02-nBNEp4JE-kXUNpFS41a_laYaTkeMIjraFcFA41HmGJE4XlungRF5kVExmqkCsW4Y3Vdso4ZNCJTts9Ul5Vo1pU6jQUKoqrGt8rShNghMAgzgH_xtMP93le0BrGXFmdXcGv2LLMAFV4yBFlpuVzPebGI0ipQPvxOXnslig8YNO_RuaVe5SEBX0IY_wrH7C5FLMCL6wd0jk0YYA2me63yCqoIXiuc96r7h8jS3UWKnsZR7oAw1e1e_5J1WFDrmng2lET0DPgjI8a9SUdt4qR294_8j3EGpzqtFNGv-d2KP2l1SVZhXSXOoETYOTpXCXqaHKzHq8W6MCqJJ_EUuXOFnIX1gpUaCqmwcT6lGxrXnV8gMUmnwItoYl6zgRwPE7Uf9K3bGGfAS-xhuZxu0QMl-Ij4gTIHOt5SJ3fJT-rWUz6jN9E6WyTZ3nGkIrcbTgyQuMhUJuglLDFX_nK1C5kQPZAI2LbRuC72wyv-2_mURK8TeIrGYlccwq2utRt0XkfYQdfBfxeHxbrixdfD_SzBFys1AeQZoK2dLI5lV-gwm740CMQ61DMbkpMY_dRUN9ZoIvCPnyxK8nA4S0_zjqRCab-C5sJ2733KiZWdCECB9izpLTaGkaIiDI0M8tAkMn9Lm6rLCC2z5i0ANq-GqVABzjubOUCE8xhmTubnRimRdKIrU-mhbHAHgnMte18fsGPGhKj7Lgy8EqtJ_DyiUwCmyI2ASC9fky1Zd0v-kxhg4UHApcthZqCvt4g2JNCmYSecVq5-H9wHzVCv1WIdl_vS3jxHH0C0bSU-MQEEK2oAJw1__WyQzKkaFiAkF1tAo2CM2zJPgv8WogJ3K3wgs9atE0fUDpGjgSxWLUJeL1jj9GhXaKRsEkNfg3I9QHolr30SoGXFNvujDdchLcA18SwjCMzBHxvWSN5GE3rkc-sNQGwiRRBcGKV74QHc7SrRe6VNd9f3Zp-dIEaVtlOC_hF56ucYiNlg_sLHrbIF0t5L4ZpR5hUvKkvrEONMlzK4pvBvYV3OjLvacucxLvkwow5oo3xYUVgtVF67fE08XDoQ5UnJdd96BXls6PbgqA1bZR6zIDgdZgQskTTYAp53nLVZU9rsRKe_-SeyWRsSrnjflnW0Ps2MSSGS4rEUCvRMaWys8TYhwQiYJIloAB9TW6YiMlRdX3pOePi7lkrAG_lsof1W5nqNE7C7I1RgwtJONbSwNUij-o7Wk4zPmTTNPx_aajydEUtiYuBfvFnkvy0iXunMEfIzCNy2MvfB1g297bCnTN6VGuaB_Ff5t27aqES21XzzJB4jz8U4UtDZyleqOIeRIpf4IOmOJrnu0WdyaQ502wR_lqQYA-zbln6203X3_R78lKVK21ZOjHhOn0GrLYC0eSTUV5ZQMB1Drsl5cdkA5sbTLBC7aupeqyrmxq3CJow4Qfs7oiXI1wz8141jB0AOk4VjxaepO9P97h4QKdkpF5O4TfuwF4c-8Wc5IzkX2Ah719a6uMjvSQUjOD_N4MWUcQJ8etzPxuePPqosFSwibRNXJe9eYK_fX-lZPLpntqLCiHprvBtn5zlvgOvjl7L1WlzpzXNIidtpjPlGu7XuDxhy_Yzjhc0iHvlTgpOxT9C_SC-ue54HcooVZ059CKZiJZVGiIeeIOBj46wJYX8RGc-baBvR8NC2vWQ2y-YxCiKiRZwKWbEm1C1g3BjSEEaT-FgGNubrULv8L8nzjcfFsCbr5UqCkPkzu9WUgTXpdzJtIII4Qr7nitJxRoY9EwzX6hUM4vwPBuoJixMD0Twj8pMnYMs_kpLTi6oRFgLrhugpNnpgImN0Dwb_5vQJ8oXxg_AtTxYcOIrZE8B0MpGgjIfveKhDJOtsyerFk43mrLX3UYxP4JYMPqmA5Y3InfUAyZgjcOhliN9mmMkM6fgzKZLdC5ZCAIzTghodlwkz5MnMHSw2kCzBY-i4PBmM6UpfCDvZB7fQ7TtiC57uxEslzR1uSQfIdT6faZJTB9cmApwcMPBTVBCeXTKctlGuvl9V2JJkd4CKrm65Di_gGPmBZUYGc2ZfOSdJCFsQIj1y3gQR_hWXLOQG8x3JhH72jrvEUOdyW8LovS4ck3GmCYWMk54Iwwh5fdcCevMPbNoZBEfusfTlPjbkLvjEAqq6A1XkInFZku-t0HNHuzWRIUfMIK5AcJFylW9lWXH4aM3byX1BNNT5k8EEf6zHD-2_njOZo3xRRxV1dx8Zs1gsrEUiyrfojMVxRU0T8mahc24fsCIGdroqZ6WdkMrRmp8sGisASKeiWS0ID8Q49wI3oDYCfF-OghrBr0-ZpGrgKl8swxOp1bTKAE-HslcVseQr0rLItRPKKKVRynvBkWIx3GvfMULnm8_LSpF00DOTEMVbe1iZukgDB0OCoz-IczV0FnRBUUcFcehpptYQ2t5Zajysg1mJSHhZB6xinGdRUgmhbvshDBTzyDtafJQdDrb6PZGSj24CARrAK1wYiiqCA-4OoxBqE73y650UchsmvM9RXGS49c3PhImCvUEeAUG-q_C3sA9btd2E1t7tOhma5zaxDSzYxRi8ITpexldlCDgsqxESnN0v63k7hRKuJhdcRCAL2aIzoewKSOfrbL2PqtZ-ORXo9_LmRZpLNV8OSsr2bEh0E3rEkuqzlvasVv7WBpV7t8P0FYqtWlBa7IjVOICz7IWcvnHO4MLx1iKp3a-e3RgDW9mXuWd2Md3yyly6VayvjF5Vf88TMnfUdWQ8wA8jctjrpzEgeMMp7tJFC6fmJjhZIcDKnlNV55CKekcKjAJKGRp8MPf8PhGZVsl65cWkzzRMSIj6CErEMAZi_xN1xIUxB1Dv6lbzdbVOrODKiZzrhvx_ACRI1EeQQFE-Lynh1hBZqcul7RTPzlpw3rh2YOZKy0b0Essx7yhY4mqeobD77yqzNqsbKByrfDfhIo5xpSUdIcKyjyXAHYTFOntUvrRSVeWE6NYbSP_haSRsUlFaJBU4QxMz4WcyKs6oRdn6VExlZzsQ8JLU8n1lbZpSjrwAJzJH-zLvvrNDp0biEoy9K3IKp7fmPgUKaLEIIRzjJWLGa1GYdUb3pVv6KANYhnqtL6JXmjTzIeeKeroqFal4zfLEmsgjFJT8B5GhUXEse7PXS7WJnPsSAPW6eWpiyRq-BRtSODtQffIf0xYyeatN_Ol6oAJgPGu8zSU08OQIBrgIkEmEnSNc_o1hQPpEuWlaFu51Ql16YWOB7DkFUsExrvrzTNnM3b4Lje9WDdwPqChRtfeRN5F8R5kMJZj3W2kEAo23Po514oyH932caJhClgLE3W2xq3xHyUmkU63Q0_OR",
+      "alias":"",
+      "shortAddress":"058ef0ea39ee4d8650d5cb46d2c286a208c479076c9b31645aaea8563b8d5ad870d9110c573650c1a9fec8e121df383f",
+      "type":"MAIN"
+   }
+]
+```
+
+# 8. Transactions
+In this section is presented how to manage the transactions that are sent to the blockchain regarding the section 6.d. 
+
+## 8.a Transaction Get
+It gets all the available transactions prepared. 
+the target field of the code underneath involves the *transaction hash*. 
+```json
+URL_PAYARA/resources/javaee8/transactions/  
+  
+{  
+"action": "get",  
+"targets": [  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",  
+"cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",  
+"Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",  
+"6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."  
+	]  
+}  
+{  
+"error": "",  
+"getResponse": {  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.": "{\"publicKey\":\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\",\"signature\":\"aJczxcI3xWhRBLiGEbjiyhv3_xAclKEde6q-pbIEafaLWUhkoHIFGjJtmby4Wdyqv5j9yuDWu_j0BKzDmcr_Bw..\",\"message\":\"{\\\"from\\\":\\\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"field\\\\\\\":\\\\\\\"Test!\\\\\\\"}\\\",\\\"notBefore\\\":1612868268401,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"NUZ2\",\"walletCypher\":\"Ed25519BC\"}"  
+	},  
+"requestType": "get",  
+"success": true  
+}
+```
+
+
+## 8.b  Transactions List 
+
+It lists all the transaction hashes already sent splitted by the three categories: 
+1. **Pending:**
+The initial phase when the invokation is performed, all the transactions are bookmarked as pending and are stored in the pending folder.
+2. **Succeeded:** 
+Once the transaction is successful uploaded to the blockchain it is moved to the succeeded folder
+3. **Failed:** 
+If something goes wrong the transaction is moved to the failed folder.
+Who is in charge to handle the moving of this transactions is described on section 9.  
+```json
+URL_PAYARA/resources/javaee8/transactions/  
+{  
+"action": "list"  
+}  
+{  
+"error": "",  
+"listResponse": {  
+"pending": [  
+"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
+	],  
+"failed": [],  
+"transactions": [  
+"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
+	],  
+"succeeded": []  
+},  
+"requestType": "list",  
+"success": true  
+}
+```
+## 8.c Transactions List with different filters 
+
+According to the parameter set it returns the result
+**pending/succeeded/failed** of the transactions according to their three stages.
+```json
+URL_PAYARA/resources/javaee8/transactions/  
+{  
+"action": "list",  
+"param": "**pending/succeeded/failed**"  
+}  
+{  
+"error": "",  
+"listResponse": {  
+"pending": [  
+"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
+]  
+},  
+"requestType": "list",  
+"success": true  
+}  
+```  
+## 8.d Transactions Delete
+If we want to delete any transaction, just invoke the Transactions API by specifying the delete action and, in the target field, the transaction hash list, follow the example below.
+```json 
+URL_PAYARA/resources/javaee8/transactions/  
+{  
+"action": "delete",  
+"targets": [  
+"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",  
+"cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",  
+"Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",  
+"6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."  
+	]  
+}
+```
+# 9. CRONJOB  
+When API is invoked it updates the internal state transition that have been sent to the blockchain: particularly from pending-> succeeded/failed.
+It is recommended to set the invocation of this job every minute, it assures to have an updated information of the Blob From Json sent transactions. 
+```json  
+http://localhost:8080/walletwebversion/resources/javaee8/cronjob/  
+{  
+"endpoint": "[https://dev.takamaka.io/api/V2/testapi/listtransactions](https://dev.takamaka.io/api/V2/testapi/listtransactions)"  
+}  
+{  
+"endTime": 1612869259311,  
+"startTime": 1612869252358,  
+"success": true  
+}
+```
+
+
