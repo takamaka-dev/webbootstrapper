@@ -661,7 +661,7 @@ http://localhost:8080/walletwebversion/resources/javaee8/cronjob/
 # 10. Enable Campaign Support
 
 To enable campaign support edit the configuration file in the file:
-``bash
+```bash
 # home of the user who launches the wallet
 cd ~
 # files folder
@@ -670,6 +670,6 @@ cd .tkm-chain
 WalletWebServiceConfig.json file
 ```
 
-``json
+```json
 {"ENABLE_CAMPAIGN_SUPPORT":true}
 ```
