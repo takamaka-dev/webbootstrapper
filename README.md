@@ -283,23 +283,29 @@ URL_PAYARA/walletwebversion/resources/javaee8/getWalletIdenticon
 # 4. Get Balance
 This service returns the balance of any address requested.
 
+## BASE_URL
+
+*  Prod: https://dev.takamaka.io/api/V2/nodeapi
+*  Test: https://dev.takamaka.io/api/V2/testapi
+
 ```json
 URL_PAYARA/walletwebversion/resources/javaee8/getWalletBalances
-{ 
-"endpoint": "https://dev.takamaka.io/api/V2/testapi/balanceof/",
-"data":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI." 
+{
+    "endpoint": "<BASE_URL>/balanceof",
+    "data":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI."
+  
 }
 ```
-**Response**
+## Response Sample
 ```json
-{ 
-"address": "sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI.", 
-"generatorSith": "EuSudfr1xH9TEsuxHpTvQw-1gk_BMRqlVgeYw-qoYag.", 
-"greenBalance": "1028000000000", 
-"greenPenalty": "0", 
-"penaltySlots": "0", 
-"redBalance": "9048666669", 
-"redPenalty": "0" 
+{
+   "address":"sX2bMNg-xPu5aI6A19KtaWjsj0GDjDPMmvFGuhzb4tI.",
+   "generatorSith":"EuSudfr1xH9TEsuxHpTvQw-1gk_BMRqlVgeYw-qoYag.",
+   "greenBalance":"1028000000000",
+   "greenPenalty":"0",
+   "penaltySlots":"0",
+   "redBalance":"9048666669",
+   "redPenalty":"0"
 }
 ```
 The number returned are expressed in nano TKG / TKR.
@@ -312,24 +318,24 @@ At the beginning we said that one wallet can have one or more addresses availabl
 There is a request of 45,000000000 green tokens and  333,000000000 red tokens to be sent to the "bh1-Tes-WalletOU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY." address,  from the Test-Wallet-Name with addressNumber=0 and its password using the function PAY. 
 ```json
 {
-"itb":{
-"greenValue":  "45000000000",
-"message":  "Pay API for test reasons",
-"redValue":  "333000000000",
-"to":  "bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.",
-"transactionType":  "PAY"
-},
-"rt":  "PAY",
-"uuid":  "ddb3327f-11ff-4a91-8ee2-2a11fc8fc4f9",
-	"wallet":{
-	"addressNumber":  0,
-	"walletCypher":  "Ed25519BC",
-	"walletName":  "Test-Wallet-Name",
-	"walletPassword": "isEncriptedPasswordWithAES256§fe7d2e707dff67ae08bb7f9547b94ea9"
-	}
-}
+   "itb":{
+      "greenValue":"45000000000",
+      "message":"Pay API for test reasons",
+      "redValue":"333000000000",
+      "to":"bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.",
+      "transactionType":"PAY"
+   },
+   "rt":"PAY",
+   "uuid":"ddb3327f-11ff-4a91-8ee2-2a11fc8fc4f9",
+   "wallet":{
+      "addressNumber":0,
+      "walletCypher":"Ed25519BC",
+      "walletName":"Test-Wallet-Name",
+      "walletPassword":"isEncriptedPasswordWithAES256§fe7d2e707dff67ae08bb7f9547b94ea9"
+   }
+ }
 ``` 
- **Response** 
+## Response Sample 
 This is the transaction generated.  Let's look closer the response. 
 
 - To address is the address that is going to receive the transaction funds and the message.
@@ -341,37 +347,37 @@ This is the transaction generated.  Let's look closer the response.
 
 ```json
 {
-"feeBean":  {
-"addr":  "gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.",
-"cpu":  0,
-"disk":  78133333,
-"hexAddr":  "8294ee25c2d7347522fd2c0449bf0129c6027c74c69feeafce52249702e1cc1a",
-"memory":  0,
-"sith":  "sDBDR5OTbgif8d-Q7IA4x0zkoYRDiHWq7WUO2JifxcY."
-},
-"request":  {
-"itb":  {
-"from":  "gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.",
-"greenValue":  45000000000,
-"message":  "Pay API for test reasons",
-"notBefore":  "2021-01-25T17:50:00.266Z[UTC]",
-"redValue":  333000000000,
-"to":  "bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.",
-"transactionHash":  "qDDzuISljy1ZGHIuMG9DihVnzCLopy-CYV0aetioIfE.",
-"transactionType":  "PAY"
-},
-"rt":  "PAY",
-"uuid":  "ddb3327f-11ff-4a91-8ee2-2a11fc8fc4f9",
-	"wallet":  {
-	"addressNumber":  0,
-	"walletCypher":  "Ed25519BC",
-	"walletName":  "Test-Wallet-Name",
-	"walletPassword": "isEncriptedPasswordWithAES256§fe7d2e707dff67ae08bb7f9547b94ea9"
-	}
-},
-"signedResponse":  "PAY",
-"trxJson":  "{\"publicKey\":\"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.\",\"signature\":\"q0Nq6KdvcKEKZ2pQEIDMsjv7noKNNNhgTEdWZgVFwZ1z5_AJbUkrea9gz6k2QB0VFHueJ1Zb9w8jvHZnv8zLAQ..\",\"message\":\"{\\\"from\\\":\\\"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.\\\",\\\"to\\\":\\\"bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.\\\",\\\"message\\\":\\\"Pay API for test reasons\\\",\\\"notBefore\\\":1611597000266,\\\"redValue\\\":333000000000,\\\"greenValue\\\":45000000000,\\\"transactionType\\\":\\\"PAY\\\",\\\"transactionHash\\\":\\\"qDDzuISljy1ZGHIuMG9DihVnzCLopy-CYV0aetioIfE.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"BhZu\",\"walletCypher\":\"Ed25519BC\"}",
-"walletKey":  0
+   "feeBean":{
+      "addr":"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.",
+      "cpu":0,
+      "disk":78133333,
+      "hexAddr":"8294ee25c2d7347522fd2c0449bf0129c6027c74c69feeafce52249702e1cc1a",
+      "memory":0,
+      "sith":"sDBDR5OTbgif8d-Q7IA4x0zkoYRDiHWq7WUO2JifxcY."
+   },
+   "request":{
+      "itb":{
+         "from":"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.",
+         "greenValue":45000000000,
+         "message":"Pay API for test reasons",
+         "notBefore":"2021-01-25T17:50:00.266Z[UTC]",
+         "redValue":333000000000,
+         "to":"bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.",
+         "transactionHash":"qDDzuISljy1ZGHIuMG9DihVnzCLopy-CYV0aetioIfE.",
+         "transactionType":"PAY"
+      },
+      "rt":"PAY",
+      "uuid":"ddb3327f-11ff-4a91-8ee2-2a11fc8fc4f9",
+      "wallet":{
+         "addressNumber":0,
+         "walletCypher":"Ed25519BC",
+         "walletName":"Test-Wallet-Name",
+         "walletPassword":"isEncriptedPasswordWithAES256§fe7d2e707dff67ae08bb7f9547b94ea9"
+      }
+   },
+   "signedResponse":"PAY",
+   "trxJson":"{\"publicKey\":\"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.\",\"signature\":\"q0Nq6KdvcKEKZ2pQEIDMsjv7noKNNNhgTEdWZgVFwZ1z5_AJbUkrea9gz6k2QB0VFHueJ1Zb9w8jvHZnv8zLAQ..\",\"message\":\"{\\\"from\\\":\\\"gpTuJcLXNHUi_SwESb8BKcYCfHTGn-6vzlIklwLhzBo.\\\",\\\"to\\\":\\\"bh1-OU7MsemfdiCUOlM9_GV-Y7vWS-MgFRxUuWJvbdY.\\\",\\\"message\\\":\\\"Pay API for test reasons\\\",\\\"notBefore\\\":1611597000266,\\\"redValue\\\":333000000000,\\\"greenValue\\\":45000000000,\\\"transactionType\\\":\\\"PAY\\\",\\\"transactionHash\\\":\\\"qDDzuISljy1ZGHIuMG9DihVnzCLopy-CYV0aetioIfE.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"BhZu\",\"walletCypher\":\"Ed25519BC\"}",
+   "walletKey":0
 }
 
 ```
@@ -439,33 +445,31 @@ After we verify the request we are ready to send the transaction to our blockcha
 }
 ```
 
-
-
 # 6.b Blob Rich Text 
 This is one of the functions that takes us to the next step of sending this text into the blockchain.
 This call works correctly using Postman. 
 *It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
 ```json
 {
-"itb":  {
-"epoch":  null,
-"from":  "4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
-"greenValue":  null,
-"redValue":  null,
-"transactionHash":  null,
-"to":  null,
-"slot":  null,
-"message":  "{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
-"transactionType":  "BLOB"
-},
-"rt":  "BLOB_RICH_TEXT",
-"uuid":  "6d22ca3b-4f14-4ff4-b355-09bc29838c40",
-"wallet":  {
-"addressNumber":  0,
-"walletCypher":  "Ed25519BC",
-"walletName":  "Test-Wallet-Name3",
-"walletPassword":  "isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
-	}
+   "itb":{
+      "epoch":null,
+      "from":"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
+      "greenValue":null,
+      "redValue":null,
+      "transactionHash":null,
+      "to":null,
+      "slot":null,
+      "message":"{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
+      "transactionType":"BLOB"
+   },
+   "rt":"BLOB_RICH_TEXT",
+   "uuid":"6d22ca3b-4f14-4ff4-b355-09bc29838c40",
+   "wallet":{
+      "addressNumber":0,
+      "walletCypher":"Ed25519BC",
+      "walletName":"Test-Wallet-Name3",
+      "walletPassword":"isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
+   }
 }
 
 ```
@@ -475,27 +479,27 @@ This call works correctly using Postman.
 *It is important to emphasize that if you want the code to work correctly you need to set  the correct front end address belonging to your machine.*
 ```json
 {
-"env":  "test",
-"itb":  {
-"epoch":  null,
-"from":  "4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
-"greenValue":  null,
-"redValue":  null,
-"transactionHash":  null,
-"to":  null,
-"slot":  null,
-"message":  "{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
-"transactionType":  "BLOB"
-},
-"rt":  "SEND_TRX",
-"trxJson":  "{\"publicKey\":\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\",\"signature\":\"h1gmsL1UZ4w6uLucF8HkOJzNsIWjyT5JxZ9cKvyOvsOoKZoU2FhVbG6OzPjkXya9YFKgdPk5NwVEny8IcwzyDA..\",\"message\":\"{\\\"from\\\":\\\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"data\\\\\\\":\\\\\\\"TmUgamVtaSB0cmUgc2hva2UsIGRoZSB1ZGhldG9qbWUgdG9rLg..\\\\\\\",\\\\\\\"mime\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"text\\\\\\\",\\\\\\\"tags\\\\\\\":[\\\\\\\"test\\\\\\\",\\\\\\\"Rish text\\\\\\\",\\\\\\\"testo, ricco\\\\\\\",\\\\\\\"utf-8\\\\\\\"]}\\\",\\\"notBefore\\\":1612374783095,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"xpeLdBkNCzaXx8EaokK-JAS_oK_4dqs5jbc0JY0BvLc.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"POzz\",\"walletCypher\":\"Ed25519BC\"}",
-"uuid":  "6d22ca3b-4f14-4ff4-b355-09bc29838c40",
-"wallet":  {
-"addressNumber":  0,
-"walletCypher":  "Ed25519BC",
-"walletName":  "Test-Wallet-Name3",
-"walletPassword":  "isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
-	}
+   "env":"test",
+   "itb":{
+      "epoch":null,
+      "from":"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.",
+      "greenValue":null,
+      "redValue":null,
+      "transactionHash":null,
+      "to":null,
+      "slot":null,
+      "message":"{\"mime\":\"\",\"type\":\"text\",\"tags\":[\"test\",\"Rish text\",\"testo, ricco\",\"utf-8\"],\"data\":\"Ne jemi tre shoke, dhe udhetojme tok.\"}",
+      "transactionType":"BLOB"
+   },
+   "rt":"SEND_TRX",
+   "trxJson":"{\"publicKey\":\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\",\"signature\":\"h1gmsL1UZ4w6uLucF8HkOJzNsIWjyT5JxZ9cKvyOvsOoKZoU2FhVbG6OzPjkXya9YFKgdPk5NwVEny8IcwzyDA..\",\"message\":\"{\\\"from\\\":\\\"4KS2Sa_8P--z3DwXjFffdULNg9RXsqlbSwNJk0zkfdc.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"data\\\\\\\":\\\\\\\"TmUgamVtaSB0cmUgc2hva2UsIGRoZSB1ZGhldG9qbWUgdG9rLg..\\\\\\\",\\\\\\\"mime\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"type\\\\\\\":\\\\\\\"text\\\\\\\",\\\\\\\"tags\\\\\\\":[\\\\\\\"test\\\\\\\",\\\\\\\"Rish text\\\\\\\",\\\\\\\"testo, ricco\\\\\\\",\\\\\\\"utf-8\\\\\\\"]}\\\",\\\"notBefore\\\":1612374783095,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"xpeLdBkNCzaXx8EaokK-JAS_oK_4dqs5jbc0JY0BvLc.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"POzz\",\"walletCypher\":\"Ed25519BC\"}",
+   "uuid":"6d22ca3b-4f14-4ff4-b355-09bc29838c40",
+   "wallet":{
+      "addressNumber":0,
+      "walletCypher":"Ed25519BC",
+      "walletName":"Test-Wallet-Name3",
+      "walletPassword":"isEncriptedPasswordWithAES256§3446cc3fedb856fe816a9d31085daf47"
+   }
 }
 ```
 # 6.d Upload Blob from JSON
