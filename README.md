@@ -646,18 +646,24 @@ URL_PAYARA/resources/javaee8/transactions/
 # 9. CRONJOB  
 When API is invoked it updates the internal state transition that have been sent to the blockchain: particularly from pending-> succeeded/failed.
 It is recommended to set the invocation of this job every minute, it assures to have an updated information of the Blob From Json sent transactions. 
-```json  
-http://localhost:8080/walletwebversion/resources/javaee8/cronjob/  
+
+*  Prod: https://dev.takamaka.io/api/V2/nodeapi/exactsearch
+*  Test: https://dev.takamaka.io/api/V2/testapi/exactsearch
+
+```json
 {
-    "endpoint": "https://dev.takamaka.io/api/V2/testapi/exactsearch"
-}  
+    "endpoint": <BASE_URL>
+}
+
+```
+## Response Sample
+```json
 {  
 "endTime": 1612869259311,  
 "startTime": 1612869252358,  
 "success": true  
 }
 ```
-
 # 10. Enable Campaign Support
 
 To enable campaign support edit the configuration file in the file:
