@@ -648,8 +648,8 @@ When API is invoked it updates the internal state transition that have been sent
 It is recommended to set the invocation of this job every minute, it assures to have an updated information of the Blob From Json sent transactions. 
 ```json  
 http://localhost:8080/walletwebversion/resources/javaee8/cronjob/  
-{  
-"endpoint": "[https://dev.takamaka.io/api/V2/testapi/listtransactions](https://dev.takamaka.io/api/V2/testapi/listtransactions)"  
+{
+    "endpoint": "https://dev.takamaka.io/api/V2/testapi/exactsearch"
 }  
 {  
 "endTime": 1612869259311,  
