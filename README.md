@@ -502,17 +502,25 @@ This call works correctly using Postman.
 This service creates in background a structure of three folders each of these describe the state of the aready sent transactions. 
 They are similar to a bookmark used by the endpoint transactions service with three different actions: Get, List, Delete (see section 8).
 It is important to change with the address of where is the Payara running, substitute the part of URL_PAYARA with the address of the running server that it could be for example: `http://localhost:8080/resources/javaee8/uploadBlob/` 
+
+## BASE_URL
+
+*  Prod: https://dev.takamaka.io/api/V2/nodeapi
+*  Test: https://dev.takamaka.io/api/V2/testapi
+
 ```json
 URL_PAYARA/resources/javaee8/uploadBlob/
-{  
-"message": "{\"field\": \"Test!\"}",  
-"addressNumber": 0,  
-"walletCypher": "Ed25519BC",  
-"walletName": "walletKali",  
-"walletPassword": "11111111",  
-"endpoint": "[https://dev.takamaka.io/api/V2/testapi/transaction/](https://dev.takamaka.io/api/V2/testapi/transaction/)"  
-}  
-  
+{
+   "message":"{\"field\": \"Test!\"}",
+   "addressNumber":0,
+   "walletCypher":"Ed25519BC",
+   "walletName":"walletKali",
+   "walletPassword":"11111111",
+    "endpoint": <BASE_URL>/transaction
+}
+```
+## Response Sample
+```json
 {"transactionHash":["Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."]}
 ```
 
@@ -554,22 +562,22 @@ the target field of the code underneath involves the *transaction hash*.
 ```json
 URL_PAYARA/resources/javaee8/transactions/  
   
-{  
-"action": "get",  
-"targets": [  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",  
-"cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",  
-"Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",  
-"6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."  
-	]  
-}  
-{  
-"error": "",  
-"getResponse": {  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.": "{\"publicKey\":\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\",\"signature\":\"aJczxcI3xWhRBLiGEbjiyhv3_xAclKEde6q-pbIEafaLWUhkoHIFGjJtmby4Wdyqv5j9yuDWu_j0BKzDmcr_Bw..\",\"message\":\"{\\\"from\\\":\\\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"field\\\\\\\":\\\\\\\"Test!\\\\\\\"}\\\",\\\"notBefore\\\":1612868268401,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"NUZ2\",\"walletCypher\":\"Ed25519BC\"}"  
-	},  
-"requestType": "get",  
-"success": true  
+{
+   "action":"get",
+   "targets":[
+      "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",
+      "cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",
+      "Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",
+      "6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."
+   ]
+}
+{
+   "error":"",
+   "getResponse":{
+      "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.":"{\"publicKey\":\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\",\"signature\":\"aJczxcI3xWhRBLiGEbjiyhv3_xAclKEde6q-pbIEafaLWUhkoHIFGjJtmby4Wdyqv5j9yuDWu_j0BKzDmcr_Bw..\",\"message\":\"{\\\"from\\\":\\\"3EM-Gg2UbHyIyuDjdrL229FgJLR66mHSMhd-5dAP8r4.\\\",\\\"to\\\":null,\\\"message\\\":\\\"{\\\\\\\"field\\\\\\\":\\\\\\\"Test!\\\\\\\"}\\\",\\\"notBefore\\\":1612868268401,\\\"redValue\\\":null,\\\"greenValue\\\":null,\\\"transactionType\\\":\\\"BLOB\\\",\\\"transactionHash\\\":\\\"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.\\\",\\\"epoch\\\":null,\\\"slot\\\":null}\",\"randomSeed\":\"NUZ2\",\"walletCypher\":\"Ed25519BC\"}"
+   },
+   "requestType":"get",
+   "success":true
 }
 ```
 
@@ -589,22 +597,26 @@ URL_PAYARA/resources/javaee8/transactions/
 {  
 "action": "list"  
 }  
-{  
-"error": "",  
-"listResponse": {  
-"pending": [  
-"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
-	],  
-"failed": [],  
-"transactions": [  
-"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
-	],  
-"succeeded": []  
-},  
-"requestType": "list",  
-"success": true  
+{
+   "error":"",
+   "listResponse":{
+      "pending":[
+         "cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",
+         "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."
+      ],
+      "failed":[
+         
+      ],
+      "transactions":[
+         "cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",
+         "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."
+      ],
+      "succeeded":[
+         
+      ]
+   },
+   "requestType":"list",
+   "success":true
 }
 ```
 ## 8.c Transactions List with different filters 
@@ -613,48 +625,49 @@ According to the parameter set it returns the result
 **pending/succeeded/failed** of the transactions according to their three stages.
 ```json
 URL_PAYARA/resources/javaee8/transactions/  
-{  
-"action": "list",  
-"param": "**pending/succeeded/failed**"  
-}  
-{  
-"error": "",  
-"listResponse": {  
-"pending": [  
-"cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."  
-]  
-},  
-"requestType": "list",  
-"success": true  
+{
+   "action":"list",
+   "param":"**pending/succeeded/failed**"
+} 
+{
+   "error":"",
+   "listResponse":{
+      "pending":[
+         "cGrX7ZPLgARvjRzh0IdnXXCh4Xtf_nbVLLY4-7-b3RY.",
+         "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM."
+      ]
+   },
+   "requestType":"list",
+   "success":true
 }  
 ```  
 ## 8.d Transactions Delete
 If we want to delete any transaction, just invoke the Transactions API by specifying the delete action and, in the target field, the transaction hash list, follow the example below.
 ```json 
 URL_PAYARA/resources/javaee8/transactions/  
-{  
-"action": "delete",  
-"targets": [  
-"Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",  
-"cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",  
-"Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",  
-"6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."  
-	]  
+{
+   "action":"delete",
+   "targets":[
+      "Zni6MvDssVVeuFzHhIo-35SrO8mMC30Q_qJSSSSfazM.",
+      "cnAHxAW1RC-mu2wNb2bn38lriggVIFne62RJpOY_Wg4.",
+      "Vv-8wH3gd42sramKwEJE5zVAGECijDlWcQkAFpPr_Zg.",
+      "6FBszMQAZhc5-iRBCGAoCRV4tZgj3Ec7uy_3vHSlqc8."
+   ]
 }
 ```
 # 9. CRONJOB  
 When API is invoked it updates the internal state transition that have been sent to the blockchain: particularly from pending-> succeeded/failed.
 It is recommended to set the invocation of this job every minute, it assures to have an updated information of the Blob From Json sent transactions. 
 
-*  Prod: https://dev.takamaka.io/api/V2/nodeapi/exactsearch
-*  Test: https://dev.takamaka.io/api/V2/testapi/exactsearch
+## BASE_URL
+
+*  Prod: https://dev.takamaka.io/api/V2/nodeapi
+*  Test: https://dev.takamaka.io/api/V2/testapi
 
 ```json
 {
-    "endpoint": <BASE_URL>
+    "endpoint": <BASE_URL>/exactsearch
 }
-
 ```
 ## Response Sample
 ```json
