@@ -23,7 +23,7 @@ Let describe a few steps to start using the following project:
 
  1. Get an IDE environment in your computer, example a NetBeans, etc,.
  2. Import the project using the above link.
-   2.1. ciao 
+     2.1. ciao 
  4. Build the project in your IDE.
  5. Run the project on your IDE.
  6.  When the project is run, it automatically opens a web browser with the login page where it is possible to start using and experimenting the features of the project. 
