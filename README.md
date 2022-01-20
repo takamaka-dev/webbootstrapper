@@ -23,10 +23,11 @@ Let describe a few steps to start using the following project:
 
  1. Get an IDE environment in your computer, example a NetBeans, etc,.
  2. Import the project using the above link.
- 3. Build the project in your IDE.
- 4. Run the project on your IDE.
- 5.  When the project is run, it automatically opens a web browser with the login page where it is possible to start using and experimenting the features of the project. 
- 6. It is important to emphasize that the call of the API are true and if all the conditions are respected, it is possible to upload the transactions into the blockchain.
+   2.1. ciao 
+ 4. Build the project in your IDE.
+ 5. Run the project on your IDE.
+ 6.  When the project is run, it automatically opens a web browser with the login page where it is possible to start using and experimenting the features of the project. 
+ 7. It is important to emphasize that the call of the API are true and if all the conditions are respected, it is possible to upload the transactions into the blockchain.
 
 ## Apache basic configuration example
 
